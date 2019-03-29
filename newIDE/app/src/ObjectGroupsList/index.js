@@ -1,4 +1,6 @@
 // @flow
+import { Trans } from '@lingui/macro';
+
 import React, { Component } from 'react';
 import { AutoSizer, List } from 'react-virtualized';
 import Background from '../UI/Background';
@@ -66,7 +68,7 @@ class GroupsList extends Component<*, *> {
                 style={style}
                 disabled
                 onClick={this.props.onAddGroup}
-                primaryText="Click to add a group"
+                primaryText={<Trans>Click to add a group</Trans>}
               />
             );
           }
@@ -91,7 +93,8 @@ class GroupsList extends Component<*, *> {
               onEditName={() => this.props.onEditName(groupWithContext)}
               onDelete={() => this.props.onDelete(groupWithContext)}
               onRename={newName =>
-                this.props.onRename(groupWithContext, newName)}
+                this.props.onRename(groupWithContext, newName)
+              }
               editingName={nameBeingEdited}
               isGlobalGroup={groupWithContext.global}
             />
@@ -294,7 +297,8 @@ export default class GroupsListContainer extends React.Component<*, StateType> {
                 onDelete={this._onDelete}
                 onRename={this._onRename}
                 onSortEnd={({ oldIndex, newIndex }) =>
-                  this._onMove(oldIndex, newIndex)}
+                  this._onMove(oldIndex, newIndex)
+                }
                 helperClass="sortable-helper"
                 distance={20}
               />
@@ -307,7 +311,8 @@ export default class GroupsListContainer extends React.Component<*, StateType> {
           onChange={text =>
             this.setState({
               searchText: text,
-            })}
+            })
+          }
         />
       </Background>
     );

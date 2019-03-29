@@ -1,9 +1,26 @@
 // @flow
 import findIndex from 'lodash/findIndex';
+import EventsEditor from './Editors/EventsEditor';
+import DebuggerEditor from './Editors/DebuggerEditor';
+import EventsFunctionsExtensionEditorWrapper from './Editors/EventsFunctionsExtensionEditor';
+import ExternalEventsEditor from './Editors/ExternalEventsEditor';
+import ExternalLayoutEditor from './Editors/ExternalLayoutEditor';
+import ResourcesEditor from './Editors/ResourcesEditor';
+import SceneEditor from './Editors/SceneEditor';
+
+// Supported editors
+type EditorRef =
+  | DebuggerEditor
+  | EventsEditor
+  | EventsFunctionsExtensionEditorWrapper
+  | ExternalEventsEditor
+  | ExternalLayoutEditor
+  | ResourcesEditor
+  | SceneEditor;
 
 export type EditorTab = {|
   render: (isCurrentTab: boolean) => React$Element<*>,
-  editorRef: ?any,
+  editorRef: ?EditorRef,
   name: string,
   key: string,
   closable: boolean,
@@ -119,15 +136,25 @@ export const closeProjectTabs = (
     {
       ...state,
       editors: state.editors.filter(editorTab => {
-        return (
-          !editorTab.editorRef ||
-          !editorTab.editorRef.getProject() ||
-          editorTab.editorRef.getProject() !== project
-        );
+        const editorProject =
+          editorTab.editorRef && editorTab.editorRef.getProject();
+        return !editorProject || editorProject !== project;
       }),
     },
     state.currentTab
   );
+};
+
+/*
+ * Ask the editors to persist their UI settings
+ * to the project.
+ */
+export const saveUiSettings = (state: EditorTabsState) => {
+  state.editors.forEach(editorTab => {
+    if (editorTab.editorRef && editorTab.editorRef.saveUiSettings) {
+      editorTab.editorRef.saveUiSettings();
+    }
+  });
 };
 
 export const closeLayoutTabs = (state: EditorTabsState, layout: gdLayout) => {
@@ -135,12 +162,9 @@ export const closeLayoutTabs = (state: EditorTabsState, layout: gdLayout) => {
     {
       ...state,
       editors: state.editors.filter(editorTab => {
-        return (
-          !editorTab.editorRef ||
-          !editorTab.editorRef.getLayout ||
-          !editorTab.editorRef.getLayout() ||
-          editorTab.editorRef.getLayout() !== layout
-        );
+        const editorLayout =
+          editorTab.editorRef && editorTab.editorRef.getLayout();
+        return !editorLayout || editorLayout !== layout;
       }),
     },
     state.currentTab
@@ -155,12 +179,16 @@ export const closeExternalLayoutTabs = (
     {
       ...state,
       editors: state.editors.filter(editorTab => {
-        return (
-          !editorTab.editorRef ||
-          !editorTab.editorRef.getExternalLayout ||
-          !editorTab.editorRef.getExternalLayout() ||
-          editorTab.editorRef.getExternalLayout() !== externalLayout
-        );
+        const editor = editorTab.editorRef;
+
+        if (editor instanceof ExternalLayoutEditor) {
+          return (
+            !editor.getExternalLayout() ||
+            editor.getExternalLayout() !== externalLayout
+          );
+        }
+
+        return true;
       }),
     },
     state.currentTab
@@ -175,12 +203,15 @@ export const closeExternalEventsTabs = (
     {
       ...state,
       editors: state.editors.filter(editorTab => {
-        return (
-          !editorTab.editorRef ||
-          !editorTab.editorRef.getExternalEvents ||
-          !editorTab.editorRef.getExternalEvents() ||
-          editorTab.editorRef.getExternalEvents() !== externalEvents
-        );
+        const editor = editorTab.editorRef;
+        if (editor instanceof ExternalEventsEditor) {
+          return (
+            !editor.getExternalEvents() ||
+            editor.getExternalEvents() !== externalEvents
+          );
+        }
+
+        return true;
       }),
     },
     state.currentTab
@@ -195,14 +226,34 @@ export const closeEventsFunctionsExtensionTabs = (
     {
       ...state,
       editors: state.editors.filter(editorTab => {
-        return (
-          !editorTab.editorRef ||
-          !editorTab.editorRef.getEventsFunctionsExtension ||
-          !editorTab.editorRef.getEventsFunctionsExtension() ||
-          editorTab.editorRef.getEventsFunctionsExtension() !== eventsFunctionsExtension
-        );
+        const editor = editorTab.editorRef;
+        if (editor instanceof EventsFunctionsExtensionEditorWrapper) {
+          return (
+            !editor.getEventsFunctionsExtension() ||
+            editor.getEventsFunctionsExtension() !== eventsFunctionsExtension
+          );
+        }
+
+        return true;
       }),
     },
     state.currentTab
   );
+};
+
+export const getEventsFunctionsExtensionEditor = (
+  state: EditorTabsState,
+  eventsFunctionsExtension: gdEventsFunctionsExtension
+): ?{| editor: EventsFunctionsExtensionEditorWrapper, tabIndex: number |} => {
+  for (let tabIndex = 0; tabIndex < state.editors.length; ++tabIndex) {
+    const editor = state.editors[tabIndex].editorRef;
+    if (
+      editor instanceof EventsFunctionsExtensionEditorWrapper &&
+      editor.getEventsFunctionsExtension() === eventsFunctionsExtension
+    ) {
+      return { editor, tabIndex };
+    }
+  }
+
+  return null;
 };

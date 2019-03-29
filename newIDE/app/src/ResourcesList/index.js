@@ -11,6 +11,7 @@ import {
   createOrUpdateResource,
   getLocalResourceFullPath,
   resourceHasValidPath,
+  RESOURCE_EXTENSIONS,
 } from './ResourceUtils.js';
 import { type ResourceKind } from './ResourceSource.flow';
 
@@ -18,10 +19,6 @@ const path = optionalRequire('path');
 const glob = optionalRequire('glob');
 const electron = optionalRequire('electron');
 const hasElectron = electron ? true : false;
-
-const IMAGE_EXTENSIONS = 'png,jpg,jpeg,PNG,JPG,JPEG';
-const AUDIO_EXTENSIONS = 'wav,mp3,ogg,WAV,MP3,OGG';
-const FONT_EXTENSIONS = 'ttf,ttc,TTF,TTC';
 
 const gd = global.gd;
 
@@ -34,6 +31,7 @@ const styles = {
 type State = {|
   renamedResource: ?gdResource,
   searchText: string,
+  resourcesWithMissingPath: { [string]: boolean },
 |};
 
 type Props = {|
@@ -49,19 +47,11 @@ type Props = {|
 |};
 
 export default class ResourcesList extends React.Component<Props, State> {
-  static defaultProps = {
-    onDeleteResource: (resource: gdResource, cb: boolean => void) => cb(true),
-    onRenameResource: (
-      resource: gdResource,
-      newName: string,
-      cb: boolean => void
-    ) => cb(true),
-  };
-
   sortableList: any;
   state: State = {
     renamedResource: null,
     searchText: '',
+    resourcesWithMissingPath: {},
   };
 
   shouldComponentUpdate(nextProps: Props, nextState: State) {
@@ -93,7 +83,7 @@ export default class ResourcesList extends React.Component<Props, State> {
 
   _locateResourceFile = (resource: gdResource) => {
     const resourceFolderPath = path.dirname(
-      getLocalResourceFullPath(this.props.project, resource.getFile())
+      getLocalResourceFullPath(this.props.project, resource.getName())
     );
     electron.shell.openItem(resourceFolderPath);
   };
@@ -101,7 +91,7 @@ export default class ResourcesList extends React.Component<Props, State> {
   _openResourceFile = (resource: gdResource) => {
     const resourceFilePath = getLocalResourceFullPath(
       this.props.project,
-      resource.getFile()
+      resource.getName()
     );
     electron.shell.openItem(resourceFilePath);
   };
@@ -109,7 +99,7 @@ export default class ResourcesList extends React.Component<Props, State> {
   _copyResourceFilePath = (resource: gdResource) => {
     const resourceFilePath = getLocalResourceFullPath(
       this.props.project,
-      resource.getFile()
+      resource.getName()
     );
     electron.clipboard.writeText(resourceFilePath);
   };
@@ -143,8 +133,7 @@ export default class ResourcesList extends React.Component<Props, State> {
 
   _removeUnusedResources = (resourceType: ResourceKind) => {
     const { project } = this.props;
-    gd.ProjectResourcesAdder
-      .getAllUseless(project, resourceType)
+    gd.ProjectResourcesAdder.getAllUseless(project, resourceType)
       .toJSArray()
       .forEach(resourceName => {
         console.info(
@@ -191,6 +180,12 @@ export default class ResourcesList extends React.Component<Props, State> {
       showWarningBox('Another resource with this name already exists');
       return;
     }
+
+    // eslint-disable-next-line
+    const answer = confirm(
+      'Are you sure you want to rename this resource? \nGame objects using the old name will no longer be able to find it!'
+    );
+    if (!answer) return;
 
     this.props.onRenameResource(resource, newName, doRename => {
       if (!doRename) return;
@@ -242,7 +237,7 @@ export default class ResourcesList extends React.Component<Props, State> {
         label: 'Scan for Images',
         click: () => {
           this._scanForNewResources(
-            IMAGE_EXTENSIONS,
+            RESOURCE_EXTENSIONS.image,
             () => new gd.ImageResource()
           );
         },
@@ -252,7 +247,7 @@ export default class ResourcesList extends React.Component<Props, State> {
         label: 'Scan for Audio',
         click: () => {
           this._scanForNewResources(
-            AUDIO_EXTENSIONS,
+            RESOURCE_EXTENSIONS.audio,
             () => new gd.AudioResource()
           );
         },
@@ -262,8 +257,18 @@ export default class ResourcesList extends React.Component<Props, State> {
         label: 'Scan for Fonts',
         click: () => {
           this._scanForNewResources(
-            FONT_EXTENSIONS,
+            RESOURCE_EXTENSIONS.font,
             () => new gd.FontResource()
+          );
+        },
+        enabled: hasElectron,
+      },
+      {
+        label: 'Scan for Videos',
+        click: () => {
+          this._scanForNewResources(
+            RESOURCE_EXTENSIONS.video,
+            () => new gd.VideoResource()
           );
         },
         enabled: hasElectron,
@@ -297,6 +302,25 @@ export default class ResourcesList extends React.Component<Props, State> {
     ];
   };
 
+  checkMissingPaths = () => {
+    const { project } = this.props;
+    const resourcesManager = project.getResourcesManager();
+    const resourceNames = resourcesManager.getAllResourceNames().toJSArray();
+    const resourcesWithMissingPath = {};
+    resourceNames.forEach(resourceName => {
+      resourcesWithMissingPath[resourceName] = !resourceHasValidPath(
+        project,
+        resourceName
+      );
+    });
+    this.setState({ resourcesWithMissingPath });
+    this.forceUpdateList();
+  };
+
+  componentDidMount() {
+    this.checkMissingPaths();
+  }
+
   render() {
     const { project, selectedResource, onSelectResource } = this.props;
     const { searchText } = this.state;
@@ -329,10 +353,12 @@ export default class ResourcesList extends React.Component<Props, State> {
                 renamedItem={this.state.renamedResource}
                 onRename={this._rename}
                 onSortEnd={({ oldIndex, newIndex }) =>
-                  this._move(oldIndex, newIndex)}
+                  this._move(oldIndex, newIndex)
+                }
                 buildMenuTemplate={this._renderResourceMenuTemplate}
                 helperClass="sortable-helper"
                 distance={20}
+                erroredItems={this.state.resourcesWithMissingPath}
               />
             )}
           </AutoSizer>
@@ -343,7 +369,8 @@ export default class ResourcesList extends React.Component<Props, State> {
           onChange={text =>
             this.setState({
               searchText: text,
-            })}
+            })
+          }
         />
       </Background>
     );

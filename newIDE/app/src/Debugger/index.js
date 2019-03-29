@@ -1,4 +1,6 @@
 // @flow
+import { Trans } from '@lingui/macro';
+
 import * as React from 'react';
 import Toolbar from './Toolbar';
 import DebuggerContent from './DebuggerContent';
@@ -72,7 +74,7 @@ export default class Debugger extends React.Component<Props, State> {
         canPause={this._hasSelectedDebugger()}
         onOpenProfiler={() => {
           if (this._debuggerContents[this.state.selectedId])
-            this._debuggerContents[this.state.selectedId].openProfiler()
+            this._debuggerContents[this.state.selectedId].openProfiler();
         }}
       />
     );
@@ -134,8 +136,8 @@ export default class Debugger extends React.Component<Props, State> {
             selectedId !== id
               ? selectedId
               : remainingDebuggerIds.length
-                ? remainingDebuggerIds[remainingDebuggerIds.length - 1]
-                : selectedId,
+              ? remainingDebuggerIds[remainingDebuggerIds.length - 1]
+              : selectedId,
         },
         () => this.updateToolbar()
       );
@@ -301,22 +303,24 @@ export default class Debugger extends React.Component<Props, State> {
 
     return (
       <Background>
-        {!debuggerServerStarted &&
-          !debuggerServerError && (
-            <PlaceholderMessage>
-              <PlaceholderLoader />
-              <p>Debugger is starting...</p>
-            </PlaceholderMessage>
-          )}
-        {!debuggerServerStarted &&
-          debuggerServerError && (
-            <PlaceholderMessage>
-              <p>
+        {!debuggerServerStarted && !debuggerServerError && (
+          <PlaceholderMessage>
+            <PlaceholderLoader />
+            <p>
+              <Trans>Debugger is starting...</Trans>
+            </p>
+          </PlaceholderMessage>
+        )}
+        {!debuggerServerStarted && debuggerServerError && (
+          <PlaceholderMessage>
+            <p>
+              <Trans>
                 Unable to start the debugger server! Make sure that you are
                 authorized to run servers on this computer.
-              </p>
-            </PlaceholderMessage>
-          )}
+              </Trans>
+            </p>
+          </PlaceholderMessage>
+        )}
         {debuggerServerStarted && (
           <Column expand noMargin>
             <DebuggerSelector
@@ -325,11 +329,14 @@ export default class Debugger extends React.Component<Props, State> {
               onChooseDebugger={id =>
                 this.setState({
                   selectedId: id,
-                })}
+                })
+              }
             />
             {this._hasSelectedDebugger() && (
               <DebuggerContent
-                ref={debuggerContent => this._debuggerContents[selectedId] = debuggerContent}
+                ref={debuggerContent =>
+                  (this._debuggerContents[selectedId] = debuggerContent)
+                }
                 gameData={debuggerGameData[selectedId]}
                 onPlay={() => this._play(selectedId)}
                 onPause={() => this._pause(selectedId)}
@@ -344,8 +351,10 @@ export default class Debugger extends React.Component<Props, State> {
             )}
             {!this._hasSelectedDebugger() && (
               <EmptyMessage>
-                Run a preview and you will be able to inspect it with the
-                debugger.
+                <Trans>
+                  Run a preview and you will be able to inspect it with the
+                  debugger.
+                </Trans>
               </EmptyMessage>
             )}
           </Column>

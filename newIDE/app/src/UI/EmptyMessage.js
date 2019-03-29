@@ -1,6 +1,8 @@
+// @flow
 import * as React from 'react';
 import ThemeConsumer from './Theme/ThemeConsumer';
 import BackgroundText from './BackgroundText';
+// No i18n in this file
 
 const styles = {
   containerStyle: {
@@ -15,16 +17,14 @@ const styles = {
 type Props = {|
   style?: Object,
   messageStyle?: Object,
-  children: React.Node,
+  children: ?React.Node,
 |};
 
 const EmptyMessage = (props: Props) => (
   <ThemeConsumer>
     {muiTheme => (
       <div style={{ ...styles.containerStyle, ...props.style }}>
-        <BackgroundText
-          style={props.messageStyle}
-        >
+        <BackgroundText style={props.messageStyle}>
           {props.children}
         </BackgroundText>
       </div>

@@ -45,11 +45,12 @@ export default class EventsEditor extends BaseEditor {
         globalObjectsContainer={project}
         objectsContainer={layout}
         events={layout.getEvents()}
-        onPreview={(options) => this.props.onPreview(project, layout, options)}
+        onPreview={options => this.props.onPreview(project, layout, options)}
         onOpenExternalEvents={this.props.onOpenExternalEvents}
         resourceSources={this.props.resourceSources}
         onChooseResource={this.props.onChooseResource}
         resourceExternalEditors={this.props.resourceExternalEditors}
+        openInstructionOrExpression={this.props.openInstructionOrExpression}
       />
     );
   }

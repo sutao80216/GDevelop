@@ -1,7 +1,7 @@
 {
   "firstLayout": "",
   "gdVersion": {
-    "build": 97,
+    "build": 98,
     "major": 4,
     "minor": 0,
     "revision": 0
@@ -14,6 +14,7 @@
     "orientation": "default",
     "packageName": "com.example.gamename",
     "projectFile": "C:\\Users\\szoszo\\Desktop\\Projects\\gametemplates\\gdevelop5\\asteroids\\game.json",
+    "scaleMode": "linear",
     "sizeOnStartupMode": "",
     "useExternalSourceFiles": false,
     "version": "1.0.0",
@@ -5756,8 +5757,8 @@
                                       "parameters": [
                                         "",
                                         "engine_particle",
-                                        "player.PointX(engine)",
-                                        "player.PointY(engine) + Random(10)",
+                                        "player.PointX(\"engine\")",
+                                        "player.PointY(\"engine\") + Random(10)",
                                         ""
                                       ],
                                       "subInstructions": []
@@ -6280,8 +6281,8 @@
                                           "parameters": [
                                             "",
                                             "engine_particle",
-                                            "player.PointX(engine)",
-                                            "player.PointY(engine) + Random(10)",
+                                            "player.PointX(\"engine\")",
+                                            "player.PointY(\"engine\") + Random(10)",
                                             ""
                                           ],
                                           "subInstructions": []
@@ -6657,8 +6658,8 @@
                           "parameters": [
                             "",
                             "player_bullet",
-                            "player.PointX(firespot)",
-                            "player.PointY(firespot)",
+                            "player.PointX(\"firespot\")",
+                            "player.PointY(\"firespot\")",
                             ""
                           ],
                           "subInstructions": []
@@ -6916,8 +6917,8 @@
                                   "parameters": [
                                     "",
                                     "player_bullet",
-                                    "player.PointX(firespot)",
-                                    "player.PointY(firespot)",
+                                    "player.PointX(\"firespot\")",
+                                    "player.PointY(\"firespot\")",
                                     ""
                                   ],
                                   "subInstructions": []

@@ -1,4 +1,5 @@
 // @flow
+import { Trans } from '@lingui/macro';
 
 import React, { Component } from 'react';
 import { Line } from '../../../../UI/Grid';
@@ -22,6 +23,7 @@ type State = {|
   currentFrameIndex: number,
   currentFrameElapsedTime: number,
   paused: boolean,
+  fps: number,
 |};
 
 const styles = {
@@ -39,6 +41,7 @@ export default class AnimationPreview extends Component<Props, State> {
     currentFrameIndex: 0,
     currentFrameElapsedTime: 0,
     paused: false,
+    fps: Math.round(1 / this.props.timeBetweenFrames),
   };
 
   nextUpdate = null;
@@ -108,7 +111,7 @@ export default class AnimationPreview extends Component<Props, State> {
       timeBetweenFrames,
       onChangeTimeBetweenFrames,
     } = this.props;
-    const { currentFrameIndex, paused } = this.state;
+    const { currentFrameIndex, paused, fps } = this.state;
 
     const hasValidSprite =
       currentFrameIndex < spritesContainer.getSpritesCount();
@@ -124,23 +127,49 @@ export default class AnimationPreview extends Component<Props, State> {
           project={project}
         />
         <Line noMargin alignItems="center">
+          <span style={styles.timeIcon}>FPS:</span>
+          <TextField
+            value={fps}
+            onChange={(e, text) => {
+              const fps = parseFloat(text);
+              if (fps > 0) {
+                this.setState({ fps });
+                onChangeTimeBetweenFrames(parseFloat((1 / fps).toFixed(4)));
+                this.replay();
+              }
+            }}
+            id="direction-time-between-frames"
+            type="number"
+            step={1}
+            min={1}
+            max={100}
+            style={styles.timeField}
+            autoFocus={true}
+          />
           <Timer style={styles.timeIcon} />
           <TextField
             value={timeBetweenFrames}
             onChange={(e, text) => {
-              onChangeTimeBetweenFrames(text);
-              this.replay();
+              const time = parseFloat(text);
+              if (time > 0) {
+                this.setState({ fps: Math.round(1 / time) });
+                onChangeTimeBetweenFrames(time);
+                this.replay();
+              }
             }}
             id="direction-time-between-frames"
             type="number"
-            step={0.01}
-            precision={1}
+            step={0.005}
+            precision={2}
             min={0.01}
             max={5}
             style={styles.timeField}
-            autoFocus={true}
           />
-          <FlatButton icon={<Replay />} label="Replay" onClick={this.replay} />
+          <FlatButton
+            icon={<Replay />}
+            label={<Trans>Replay</Trans>}
+            onClick={this.replay}
+          />
           <FlatButton
             icon={paused ? <PlayArrow /> : <Pause />}
             label={paused ? 'Play' : 'Pause'}

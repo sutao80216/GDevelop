@@ -9,14 +9,18 @@ import YesNoField from './ParameterFields/YesNoField';
 import TrueFalseField from './ParameterFields/TrueFalseField';
 import ExpressionField from './ParameterFields/ExpressionField';
 import StringField from './ParameterFields/StringField';
+import StringWithSelectorField from './ParameterFields/StringWithSelectorField';
 import BehaviorField from './ParameterFields/BehaviorField';
 import SceneVariableField from './ParameterFields/SceneVariableField';
 import GlobalVariableField from './ParameterFields/GlobalVariableField';
 import ObjectVariableField from './ParameterFields/ObjectVariableField';
 import LayerField from './ParameterFields/LayerField';
 import AudioResourceField from './ParameterFields/AudioResourceField';
+import VideoResourceField from './ParameterFields/VideoResourceField';
 import ColorExpressionField from './ParameterFields/ColorExpressionField';
-import ForceMultiplierField, {renderForceMultiplierString} from './ParameterFields/ForceMultiplierField';
+import ForceMultiplierField, {
+  renderForceMultiplierString,
+} from './ParameterFields/ForceMultiplierField';
 const gd = global.gd;
 
 const components = {
@@ -29,6 +33,7 @@ const components = {
   trueorfalse: TrueFalseField,
   expression: ExpressionField,
   string: StringField,
+  stringWithSelector: StringWithSelectorField,
   behavior: BehaviorField,
   scenevar: SceneVariableField,
   globalvar: GlobalVariableField,
@@ -38,6 +43,7 @@ const components = {
   file: DefaultField, //TODO
   musicfile: AudioResourceField,
   soundfile: AudioResourceField,
+  videoResource: VideoResourceField,
   color: ColorExpressionField,
   police: DefaultField, //TODO
   joyaxis: DefaultField, //TODO
@@ -45,19 +51,18 @@ const components = {
 };
 
 const stringRenderers = {
-  forceMultiplier: renderForceMultiplierString
-}
+  forceMultiplier: renderForceMultiplierString,
+};
 
 export default {
   components,
-  getParameterComponent: (type: string) =>  {
+  getParameterComponent: (type: string) => {
     const fieldType = gd.ParameterMetadata.isObject(type) ? 'object' : type;
 
-    if (components.hasOwnProperty(fieldType))
-      return components[fieldType];
+    if (components.hasOwnProperty(fieldType)) return components[fieldType];
     else return components.default;
   },
-  renderParameterString: (type: string, value: string) =>  {
+  renderParameterString: (type: string, value: string) => {
     return stringRenderers[type] ? stringRenderers[type](value) : value;
   },
 };

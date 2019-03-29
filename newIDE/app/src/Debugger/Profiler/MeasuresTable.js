@@ -1,4 +1,6 @@
 // @flow
+import { Trans } from '@lingui/macro';
+
 import * as React from 'react';
 import { AutoSizer, Table, Column } from 'react-virtualized';
 import ThemeConsumer from '../../UI/Theme/ThemeConsumer';
@@ -50,11 +52,11 @@ export default class MeasuresTable extends React.Component<Props, State> {
 
     const parentPercent =
       parentSection && section.time && parentSection.time !== 0
-        ? section.time / parentSection.time * 100
+        ? (section.time / parentSection.time) * 100
         : 100;
     const totalPercent =
       profilerMeasures && section.time && profilerMeasures.time !== 0
-        ? section.time / profilerMeasures.time * 100
+        ? (section.time / profilerMeasures.time) * 100
         : 100;
     const isCollapsed = this._isSectionCollapsed(path);
 
@@ -144,26 +146,26 @@ export default class MeasuresTable extends React.Component<Props, State> {
                 width={width}
               >
                 <Column
-                  label="Section name"
+                  label={<Trans>Section name</Trans>}
                   dataKey="name"
                   width={width * 0.4}
                   className={'tableColumn'}
                   cellRenderer={this._renderSectionNameCell}
                 />
                 <Column
-                  label="Time (ms)"
+                  label={<Trans>Time (ms)</Trans>}
                   dataKey="time"
                   width={width * 0.2}
                   className={'tableColumn'}
                 />
                 <Column
-                  label="% of parent"
+                  label={<Trans>% of parent</Trans>}
                   dataKey="parentPercent"
                   width={width * 0.2}
                   className={'tableColumn'}
                 />
                 <Column
-                  label="% of total"
+                  label={<Trans>% of total</Trans>}
                   dataKey="totalPercent"
                   width={width * 0.2}
                   className={'tableColumn'}

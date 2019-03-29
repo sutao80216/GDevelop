@@ -1,3 +1,4 @@
+import { Trans } from '@lingui/macro';
 import React, { Component } from 'react';
 import TextField from 'material-ui/TextField';
 import Add from 'material-ui/svg-icons/content/add';
@@ -6,11 +7,10 @@ import IconButton from 'material-ui/IconButton';
 import EmptyMessage from '../UI/EmptyMessage';
 import MiniToolbar from '../UI/MiniToolbar';
 import HelpIcon from '../UI/HelpIcon';
-import PropertiesEditor from '../PropertiesEditor';
-import propertiesMapToSchema from '../PropertiesEditor/PropertiesMapToSchema';
 import newNameGenerator from '../Utils/NewNameGenerator';
 import NewBehaviorDialog from './NewBehaviorDialog';
 import { getBehaviorHelpPagePath } from './BehaviorsHelpPagePaths';
+import BehaviorsEditorService from './BehaviorsEditorService';
 
 const styles = {
   addBehaviorLine: {
@@ -19,9 +19,6 @@ const styles = {
   },
   addBehaviorText: {
     justifyContent: 'flex-end',
-  },
-  propertiesContainer: {
-    padding: 10,
   },
   behaviorTitle: {
     flex: 1,
@@ -143,13 +140,8 @@ export default class BehaviorsEditor extends Component {
         {allBehaviorNames
           .map((behaviorName, index) => {
             const behavior = object.getBehavior(behaviorName);
-
-            const properties = behavior.getProperties(project);
-            const propertiesSchema = propertiesMapToSchema(
-              properties,
-              behavior => behavior.getProperties(project),
-              (behavior, name, value) =>
-                behavior.updateProperty(name, value, project)
+            const BehaviorComponent = BehaviorsEditorService.getEditor(
+              behavior.getTypeName()
             );
 
             return (
@@ -159,10 +151,11 @@ export default class BehaviorsEditor extends Component {
                     Behavior{' '}
                     <TextField
                       value={behaviorName}
-                      hintText="Behavior name"
+                      hintText={<Trans>Behavior name</Trans>}
                       disabled
                       onChange={(e, text) =>
-                        this._onChangeBehaviorName(behavior, text)}
+                        this._onChangeBehaviorName(behavior, text)
+                      }
                     />
                   </span>
                   <span style={styles.behaviorTools}>
@@ -176,20 +169,13 @@ export default class BehaviorsEditor extends Component {
                     />
                   </span>
                 </MiniToolbar>
-                <div style={styles.propertiesContainer}>
-                  {propertiesSchema.length ? (
-                    <PropertiesEditor
-                      schema={propertiesSchema}
-                      instances={[behavior]}
-                    />
-                  ) : (
-                    <EmptyMessage>
-                      There is nothing to configure for this behavior. You can
-                      still use events to interact with the object and this
-                      behavior.
-                    </EmptyMessage>
-                  )}
-                </div>
+                <BehaviorComponent
+                  behavior={behavior}
+                  project={project}
+                  resourceSources={this.props.resourceSources}
+                  onChooseResource={this.props.onChooseResource}
+                  resourceExternalEditors={this.props.resourceExternalEditors}
+                />
               </div>
             );
           })

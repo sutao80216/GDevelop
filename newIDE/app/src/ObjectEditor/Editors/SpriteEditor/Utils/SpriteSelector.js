@@ -1,4 +1,6 @@
 // @flow
+import { Trans } from '@lingui/macro';
+
 import * as React from 'react';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
@@ -69,7 +71,7 @@ export default class SpriteSelector extends React.Component<Props, void> {
       <React.Fragment>
         <Line>
           <SelectField
-            floatingLabelText="Animation"
+            floatingLabelText={<Trans>Animation</Trans>}
             value={this.props.animationIndex}
             onChange={(e, i, value) => chooseAnimation(value)}
           >
@@ -84,27 +86,22 @@ export default class SpriteSelector extends React.Component<Props, void> {
               );
             })}
           </SelectField>
-          {hasValidAnimation &&
-            animation.getDirectionsCount() > 1 && (
-              <SelectField
-                floatingLabelText="Direction"
-                value={this.props.directionIndex}
-                onChange={(e, i, value) => chooseDirection(value)}
-              >
-                {mapFor(0, animation.getDirectionsCount(), i => {
-                  return (
-                    <MenuItem
-                      value={i}
-                      key={i}
-                      primaryText={`Direction #${i}`}
-                    />
-                  );
-                })}
-              </SelectField>
-            )}
+          {hasValidAnimation && animation.getDirectionsCount() > 1 && (
+            <SelectField
+              floatingLabelText={<Trans>Direction</Trans>}
+              value={this.props.directionIndex}
+              onChange={(e, i, value) => chooseDirection(value)}
+            >
+              {mapFor(0, animation.getDirectionsCount(), i => {
+                return (
+                  <MenuItem value={i} key={i} primaryText={`Direction #${i}`} />
+                );
+              })}
+            </SelectField>
+          )}
           {hasValidDirection && (
             <SelectField
-              floatingLabelText="Frame"
+              floatingLabelText={<Trans>Frame</Trans>}
               value={this.props.spriteIndex}
               onChange={(e, i, value) => chooseSprite(value)}
             >

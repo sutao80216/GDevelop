@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react';
-import { translate } from 'react-i18next';
 import { ToolbarGroup } from 'material-ui/Toolbar';
 import ToolbarSeparator from '../UI/ToolbarSeparator';
 import ToolbarIcon from '../UI/ToolbarIcon';
@@ -8,7 +7,7 @@ import { adaptAcceleratorString } from '../UI/AcceleratorString';
 
 export class Toolbar extends PureComponent {
   render() {
-    const { t } = this.props;
+    const t = str => str; //TODO
 
     return (
       <ToolbarGroup lastChild>
@@ -72,7 +71,8 @@ export class Toolbar extends PureComponent {
                 label: metadata.fullName,
                 click: () => this.props.onAddEvent(metadata.type),
               };
-            })}
+            })
+          }
         />
         <ToolbarSeparator />
         <ToolbarIcon
@@ -114,4 +114,4 @@ export class Toolbar extends PureComponent {
   }
 }
 
-export default translate()(Toolbar);
+export default Toolbar;

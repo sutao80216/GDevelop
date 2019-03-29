@@ -1,4 +1,6 @@
 // @flow
+import { Trans } from '@lingui/macro';
+
 import * as React from 'react';
 import RaisedButton from 'material-ui/RaisedButton/RaisedButton';
 import MeasuresTable from './MeasuresTable';
@@ -23,21 +25,33 @@ type Props = {|
 
 export default class Profiler extends React.Component<Props, void> {
   render() {
-    const {
-      onStart,
-      onStop,
-      profilerOutput,
-      profilingInProgress,
-    } = this.props;
+    const { onStart, onStop, profilerOutput, profilingInProgress } = this.props;
 
     return (
       <Background>
         <Line alignItems="center" justifyContent="center">
-          {!profilingInProgress && profilerOutput && (<p>Last run collected on {profilerOutput.stats.framesCount} frames.</p>)
-          }
-          {!profilingInProgress && profilerOutput && <RaisedButton label="Restart" onClick={onStart} />}
-          {!profilingInProgress && !profilerOutput && <RaisedButton label="Start profiling" onClick={onStart} />}
-          {profilingInProgress && <RaisedButton label="Stop profiling" onClick={onStop} />}
+          {!profilingInProgress && profilerOutput && (
+            <p>
+              <Trans>
+                Last run collected on {profilerOutput.stats.framesCount} frames.
+              </Trans>
+            </p>
+          )}
+          {!profilingInProgress && profilerOutput && (
+            <RaisedButton label={<Trans>Restart</Trans>} onClick={onStart} />
+          )}
+          {!profilingInProgress && !profilerOutput && (
+            <RaisedButton
+              label={<Trans>Start profiling</Trans>}
+              onClick={onStart}
+            />
+          )}
+          {profilingInProgress && (
+            <RaisedButton
+              label={<Trans>Stop profiling</Trans>}
+              onClick={onStop}
+            />
+          )}
         </Line>
         {profilingInProgress && (
           <Line alignItems="center">
@@ -46,12 +60,16 @@ export default class Profiler extends React.Component<Props, void> {
         )}
         <div style={styles.tableContainer}>
           {profilerOutput && (
-            <MeasuresTable profilerMeasures={profilerOutput.framesAverageMeasures} />
+            <MeasuresTable
+              profilerMeasures={profilerOutput.framesAverageMeasures}
+            />
           )}
           {!profilerOutput && (
             <EmptyMessage>
-              Start profiling and then stop it after a few seconds to see the
-              results.
+              <Trans>
+                Start profiling and then stop it after a few seconds to see the
+                results.
+              </Trans>
             </EmptyMessage>
           )}
         </div>

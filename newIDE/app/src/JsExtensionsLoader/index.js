@@ -1,34 +1,37 @@
-// Note: this file does not use export/imports nor Flow to allow its usage from Node.js
+// @flow
+// Note: this file does not use export/imports and use Flow comments to allow its usage from Node.js
 
 const some = require('lodash/some');
-const t = _ => _; //TODO: Implement support for i18n for extensions.
+/*flow-include 
+export type TranslationFunction = (string) => string;
 
-// export type JsExtensionModule = {
-//   createExtension(t, gd): gdPlatformExtension,
-//   runExtensionSanityTests(extension: gdPlatformExtension): Array<string>,
-// };
+export type JsExtensionModule = {
+  createExtension(_: TranslationFunction, gd: any): gdPlatformExtension,
+  runExtensionSanityTests(gd: any, extension: gdPlatformExtension): Array<string>,
+};
 
-// export type ExtensionLoadingResult = {
-//   error: boolean,
-//   message: string,
-//   dangerous?: boolean,
-//   rawError?: any,
-// };
+export type ExtensionLoadingResult = {
+  error: boolean,
+  message: string,
+  dangerous?: boolean,
+  rawError?: any,
+};
 
-// export interface JsExtensionsLoader {
-//   loadAllExtensions(): Promise<
-//     Array<{ extensionModulePath: string, result: ExtensionLoadingResult }>
-//   >,
-// }
+export interface JsExtensionsLoader {
+  loadAllExtensions(_: TranslationFunction): Promise<
+    Array<{ extensionModulePath: string, result: ExtensionLoadingResult }>
+  >,
+}
+*/
 
 /**
  * Run extensions tests and check for any non-empty results.
  */
 const runExtensionSanityTests = (
-  gd,
-  extension/*: gdPlatformExtension*/,
-  jsExtensionModule/*: JsExtensionModule*/
-)/*: ExtensionLoadingResult*/ => {
+  gd /*: any */,
+  extension /*: gdPlatformExtension*/,
+  jsExtensionModule /*: JsExtensionModule*/
+) /*: ExtensionLoadingResult*/ => {
   if (!jsExtensionModule.runExtensionSanityTests) {
     return {
       error: true,
@@ -57,10 +60,11 @@ const runExtensionSanityTests = (
  * to contain a "createExtension" function returning a gd.PlatformExtension.
  */
 const loadExtension = (
-  gd,
-  platform/*: gdPlatform*/,
-  jsExtensionModule/*: JsExtensionModule*/
-)/*: ExtensionLoadingResult*/ => {
+  _ /*: TranslationFunction */,
+  gd /*: any */,
+  platform /*: gdPlatform*/,
+  jsExtensionModule /*: JsExtensionModule*/
+) /*: ExtensionLoadingResult*/ => {
   if (!jsExtensionModule.createExtension) {
     return {
       message:
@@ -71,7 +75,7 @@ const loadExtension = (
 
   let extension = null;
   try {
-    extension = jsExtensionModule.createExtension(t, gd);
+    extension = jsExtensionModule.createExtension(_, gd);
     if (!extension) {
       return {
         message: `createExtension did not return any extension. Did you forget to return the extension created?`,
@@ -88,7 +92,11 @@ const loadExtension = (
   }
 
   try {
-    const testsResult = runExtensionSanityTests(gd, extension, jsExtensionModule);
+    const testsResult = runExtensionSanityTests(
+      gd,
+      extension,
+      jsExtensionModule
+    );
     if (testsResult.error) {
       extension.delete();
       return testsResult;
@@ -114,4 +122,4 @@ const loadExtension = (
 module.exports = {
   runExtensionSanityTests,
   loadExtension,
-}
+};

@@ -1,3 +1,4 @@
+import { Trans } from '@lingui/macro';
 import React from 'react';
 import { TableRow, TableRowColumn } from 'material-ui/Table';
 import IconButton from 'material-ui/IconButton';
@@ -20,9 +21,11 @@ const ThemablePointRow = ({
   isAutomatic,
   muiTheme,
 }) => (
-  <TableRow style={{
-    backgroundColor: muiTheme.list.itemsBackgroundColor,
-  }}>
+  <TableRow
+    style={{
+      backgroundColor: muiTheme.list.itemsBackgroundColor,
+    }}
+  >
     <TableRowColumn style={styles.handleColumn}>
       {/* <DragHandle /> Reordering point is not supported for now */}
     </TableRowColumn>
@@ -45,7 +48,9 @@ const ThemablePointRow = ({
           onChange={(e, value) => onChangePointX(parseFloat(value || 0, 10))}
         />
       ) : (
-        <p>(auto)</p>
+        <p>
+          <Trans>(auto)</Trans>
+        </p>
       )}
     </TableRowColumn>
     <TableRowColumn style={styles.coordinateColumn}>
@@ -57,7 +62,9 @@ const ThemablePointRow = ({
           onChange={(e, value) => onChangePointY(parseFloat(value || 0, 10))}
         />
       ) : (
-        <p>(auto)</p>
+        <p>
+          <Trans>(auto)</Trans>
+        </p>
       )}
     </TableRowColumn>
     <TableRowColumn style={styles.toolColumn}>
@@ -75,7 +82,5 @@ const ThemablePointRow = ({
   </TableRow>
 );
 
-const PointRow = muiThemeable()(
-  ThemablePointRow
-);
+const PointRow = muiThemeable()(ThemablePointRow);
 export default PointRow;

@@ -1,4 +1,6 @@
 // @flow
+import { Trans } from '@lingui/macro';
+
 import React, { Component } from 'react';
 import Timer from 'material-ui/svg-icons/image/timer';
 import FlatButton from 'material-ui/FlatButton';
@@ -119,7 +121,7 @@ export default class DirectionTools extends Component<Props, State> {
           />
         )}
         <FlatButton
-          label="Preview"
+          label={<Trans>Preview</Trans>}
           icon={<PlayArrow />}
           onClick={() => this.openPreview(true)}
         />
@@ -131,8 +133,8 @@ export default class DirectionTools extends Component<Props, State> {
           id="direction-time-between-frames"
           style={styles.timeField}
           type="number"
-          step={0.01}
-          precision={1}
+          step={0.005}
+          precision={2}
           min={0.01}
           max={5}
         />
@@ -151,7 +153,7 @@ export default class DirectionTools extends Component<Props, State> {
           <Dialog
             actions={
               <FlatButton
-                label="OK"
+                label={<Trans>OK</Trans>}
                 primary
                 onClick={() => this.openPreview(false)}
               />
@@ -168,7 +170,8 @@ export default class DirectionTools extends Component<Props, State> {
               project={project}
               timeBetweenFrames={this.state.timeBetweenFrames}
               onChangeTimeBetweenFrames={text =>
-                this.setState({ timeBetweenFrames: text })}
+                this.setState({ timeBetweenFrames: text })
+              }
             />
           </Dialog>
         )}

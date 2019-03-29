@@ -16,6 +16,7 @@ import {
   type ConnectDropTarget,
 } from 'react-dnd';
 import DropIndicator from './DropIndicator';
+import { Trans } from '@lingui/macro';
 
 const styles = {
   addButton: {
@@ -47,7 +48,7 @@ type Props = {
   ) => void,
   onParameterClick: ParameterContext => void,
   selection: any,
-  addButtonLabel?: string,
+  addButtonLabel?: React.Node,
   extraClassName?: string,
   style?: Object,
   disabled: boolean,
@@ -104,7 +105,8 @@ class InstructionsList extends React.Component<Props, *> {
           onClick={() => onInstructionClick(instructionContext)}
           onDoubleClick={() => onInstructionDoubleClick(instructionContext)}
           onContextMenu={(x, y) =>
-            onInstructionContextMenu(x, y, instructionContext)}
+            onInstructionContextMenu(x, y, instructionContext)
+          }
           onParameterClick={(domEvent, parameterIndex) =>
             onParameterClick({
               isCondition: instructionContext.isCondition,
@@ -113,7 +115,8 @@ class InstructionsList extends React.Component<Props, *> {
               indexInList: instructionContext.indexInList,
               parameterIndex,
               domEvent,
-            })}
+            })
+          }
           selection={selection}
           onAddNewSubInstruction={onAddNewInstruction}
           onMoveToSubInstruction={onMoveToInstruction}
@@ -132,19 +135,21 @@ class InstructionsList extends React.Component<Props, *> {
       isCondition: areConditions,
       instrsList: instrsList,
     };
-    const addButtonDefaultLabel = areConditions
-      ? 'Add condition'
-      : 'Add action';
-    return connectDropTarget(
+    const addButtonDefaultLabel = areConditions ? (
+      <Trans>Add condition</Trans>
+    ) : (
+      <Trans>Add action</Trans>
+    );
+    const instructionsList = connectDropTarget(
       <div
-        className={`${areConditions
-          ? conditionsContainer
-          : actionsContainer} ${extraClassName || ''}`}
+        className={`${
+          areConditions ? conditionsContainer : actionsContainer
+        } ${extraClassName || ''}`}
         style={style}
       >
         {instructions}
         {isOver && <DropIndicator canDrop={canDrop} />}
-        <a
+        <button
           style={styles.addButton}
           className="add-link"
           onClick={this.onAddNewInstruction}
@@ -158,9 +163,11 @@ class InstructionsList extends React.Component<Props, *> {
           }}
         >
           {addButtonLabel || addButtonDefaultLabel}
-        </a>
+        </button>
       </div>
     );
+
+    return instructionsList || null;
   }
 }
 
@@ -194,6 +201,7 @@ function targetCollect(
   };
 }
 
+// $FlowFixMe - Typing of DragSource/DropTarget is a pain to get correctly
 export default DropTarget(
   reactDndInstructionType,
   instructionsListTarget,

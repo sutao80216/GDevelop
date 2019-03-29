@@ -1,4 +1,6 @@
 // @flow
+import { Trans } from '@lingui/macro';
+
 import * as React from 'react';
 import ResourcesLoader from '../../ResourcesLoader';
 
@@ -34,6 +36,7 @@ const styles = {
 type Props = {|
   project: gdProject,
   resourceName: string,
+  resourcePath?: string,
   resourcesLoader: typeof ResourcesLoader,
   children?: any,
   style?: Object,
@@ -63,7 +66,8 @@ export default class ImagePreview extends React.Component<Props, State> {
     if (
       newProps.resourceName !== this.props.resourceName ||
       newProps.project !== this.props.project ||
-      newProps.resourcesLoader !== this.props.resourcesLoader
+      newProps.resourcesLoader !== this.props.resourcesLoader ||
+      newProps.resourcePath !== this.props.resourcePath
     ) {
       this.setState(this._loadFrom(newProps));
     }
@@ -101,8 +105,7 @@ export default class ImagePreview extends React.Component<Props, State> {
       imageWidth,
       imageHeight,
     });
-    if (this.props.onSize)
-      this.props.onSize(imageWidth, imageHeight);
+    if (this.props.onSize) this.props.onSize(imageWidth, imageHeight);
   };
 
   render() {
@@ -122,7 +125,11 @@ export default class ImagePreview extends React.Component<Props, State> {
         style={{ ...styles.imagePreviewContainer, ...style }}
         ref={container => (this._container = container)}
       >
-        {!!this.state.errored && <p>Unable to load the image</p>}
+        {!!this.state.errored && (
+          <p>
+            <Trans>Unable to load the image</Trans>
+          </p>
+        )}
         {!this.state.errored && (
           <img
             style={styles.spriteThumbnailImage}
@@ -133,17 +140,17 @@ export default class ImagePreview extends React.Component<Props, State> {
             crossOrigin="anonymous"
           />
         )}
-        {canDisplayOverlays &&
-          children && <div style={{ ...overlayStyle, ...styles.box }} />}
-        {canDisplayOverlays &&
-          children && (
-            <div style={overlayStyle}>
-              {React.cloneElement(children, {
-                imageWidth,
-                imageHeight,
-              })}
-            </div>
-          )}
+        {canDisplayOverlays && children && (
+          <div style={{ ...overlayStyle, ...styles.box }} />
+        )}
+        {canDisplayOverlays && children && (
+          <div style={overlayStyle}>
+            {React.cloneElement(children, {
+              imageWidth,
+              imageHeight,
+            })}
+          </div>
+        )}
       </div>
     );
   }

@@ -1,4 +1,6 @@
 // @flow
+import { Trans } from '@lingui/macro';
+
 import * as React from 'react';
 import { GridList, GridTile } from 'material-ui/GridList';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
@@ -116,12 +118,11 @@ class Animation extends React.Component<AnimationProps, void> {
         <MiniToolbar smallest>
           <DragHandle />
           <span style={styles.animationTitle}>
-            Animation #
-            {id}{' '}
+            Animation #{id}{' '}
             <SemiControlledTextField
               commitOnBlur
               value={animation.getName()}
-              hintText="Optional animation name"
+              hintText={<Trans>Optional animation name</Trans>}
               onChange={text => onChangeName(text)}
             />
           </span>
@@ -146,7 +147,8 @@ class Animation extends React.Component<AnimationProps, void> {
               selectedSprites={selectedSprites}
               onSelectSprite={onSelectSprite}
               onReplaceByDirection={newDirection =>
-                onReplaceDirection(i, newDirection)}
+                onReplaceDirection(i, newDirection)
+              }
               objectName={objectName}
               animationName={animationName}
               onChangeName={onChangeName}
@@ -200,7 +202,8 @@ const SortableAnimationsList = SortableContainer(
                 selectedSprites={selectedSprites}
                 onSelectSprite={onSelectSprite}
                 onReplaceDirection={(directionId, newDirection) =>
-                  onReplaceDirection(i, directionId, newDirection)}
+                  onReplaceDirection(i, directionId, newDirection)
+                }
                 objectName={objectName}
               />
             );
@@ -363,7 +366,8 @@ class AnimationsListContainer extends React.Component<
         />
         <ContextMenu
           ref={spriteContextMenu =>
-            (this.spriteContextMenu = spriteContextMenu)}
+            (this.spriteContextMenu = spriteContextMenu)
+          }
           buildMenuTemplate={() => [
             {
               label: 'Delete selection',
@@ -437,13 +441,13 @@ export default class SpriteEditor extends React.Component<EditorProps, State> {
           extraBottomTools={
             <div>
               <RaisedButton
-                label="Edit hitboxes"
+                label={<Trans>Edit hitboxes</Trans>}
                 primary={false}
                 onClick={() => this.openCollisionMasksEditor(true)}
                 disabled={spriteObject.getAnimationsCount() === 0}
               />
               <RaisedButton
-                label="Edit points"
+                label={<Trans>Edit points</Trans>}
                 primary={false}
                 onClick={() => this.openPointsEditor(true)}
                 disabled={spriteObject.getAnimationsCount() === 0}
@@ -455,7 +459,7 @@ export default class SpriteEditor extends React.Component<EditorProps, State> {
           <Dialog
             actions={
               <FlatButton
-                label="Close"
+                label={<Trans>Close</Trans>}
                 primary
                 onClick={() => this.openPointsEditor(false)}
               />
@@ -470,8 +474,10 @@ export default class SpriteEditor extends React.Component<EditorProps, State> {
               object={spriteObject}
               resourcesLoader={this.resourcesLoader}
               project={project}
-              onPointsUpdated={() =>
-                this.forceUpdate() /*Force update to ensure dialog is properly positioned*/}
+              onPointsUpdated={
+                () =>
+                  this.forceUpdate() /*Force update to ensure dialog is properly positioned*/
+              }
             />
           </Dialog>
         )}
@@ -479,7 +485,7 @@ export default class SpriteEditor extends React.Component<EditorProps, State> {
           <Dialog
             actions={
               <FlatButton
-                label="Close"
+                label={<Trans>Close</Trans>}
                 primary
                 onClick={() => this.openCollisionMasksEditor(false)}
               />
@@ -494,8 +500,10 @@ export default class SpriteEditor extends React.Component<EditorProps, State> {
               object={spriteObject}
               resourcesLoader={this.resourcesLoader}
               project={project}
-              onCollisionMasksUpdated={() =>
-                this.forceUpdate() /*Force update to ensure dialog is properly positioned*/}
+              onCollisionMasksUpdated={
+                () =>
+                  this.forceUpdate() /*Force update to ensure dialog is properly positioned*/
+              }
             />
           </Dialog>
         )}

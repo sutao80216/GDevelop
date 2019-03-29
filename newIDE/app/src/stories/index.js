@@ -54,6 +54,7 @@ import BehaviorsEditor from '../BehaviorsEditor';
 import ObjectGroupEditor from '../ObjectGroupEditor';
 import ObjectGroupsList from '../ObjectGroupsList';
 import muiDecorator from './MuiDecorator';
+import i18nProviderDecorator from './I18nProviderDecorator';
 import paperDecorator from './PaperDecorator';
 import ValueStateHolder from './ValueStateHolder';
 import RefGetter from './RefGetter';
@@ -81,6 +82,9 @@ import {
   fakeIndieUserProfile,
   fakeNotAuthenticatedUserProfile,
   fakeAuthenticatedButLoadingUserProfile,
+  release,
+  releaseWithBreakingChange,
+  releaseWithoutDescription,
 } from '../fixtures/GDevelopServicesTestData';
 import debuggerGameDataDump from '../fixtures/DebuggerGameDataDump.json';
 import profilerOutput from '../fixtures/ProfilerOutputsTestData.json';
@@ -96,7 +100,7 @@ import BuildStepsProgress from '../Export/Builds/BuildStepsProgress';
 import MeasuresTable from '../Debugger/Profiler/MeasuresTable';
 import Profiler from '../Debugger/Profiler';
 import SearchPanel from '../EventsSheet/SearchPanel';
-import { I18nextProvider } from 'react-i18next';
+import GDI18nProvider from '../Utils/i18n/GDI18nProvider';
 import PlaceholderMessage from '../UI/PlaceholderMessage';
 import PlaceholderLoader from '../UI/PlaceholderLoader';
 import InlineCheckbox from '../UI/InlineCheckbox';
@@ -104,7 +108,6 @@ import LoaderModal from '../UI/LoaderModal';
 import ColorField from '../UI/ColorField';
 import EmptyMessage from '../UI/EmptyMessage';
 import BackgroundText from '../UI/BackgroundText';
-import i18n from '../UI/i18n';
 import ObjectField from '../EventsSheet/ParameterFields/ObjectField';
 import { getInitialSelection } from '../EventsSheet/SelectionHandler';
 import EventsFunctionConfigurationEditor from '../EventsFunctionsExtensionEditor/EventsFunctionConfigurationEditor';
@@ -112,6 +115,11 @@ import EventsFunctionsList from '../EventsFunctionsList';
 import EventsFunctionsExtensionEditor from '../EventsFunctionsExtensionEditor';
 import OptionsEditorDialog from '../EventsFunctionsExtensionEditor/OptionsEditorDialog';
 import ProjectManager from '../ProjectManager';
+import AlertMessage from '../UI/AlertMessage';
+import ChangelogRenderer from '../MainFrame/Changelog/ChangelogRenderer';
+import ChangelogDialog from '../MainFrame/Changelog/ChangelogDialog';
+
+// No i18n in this file
 
 const gd = global.gd;
 const {
@@ -192,6 +200,43 @@ storiesOf('UI Building Blocks/BackgroundText', module)
   .addDecorator(muiDecorator)
   .add('default', () => (
     <BackgroundText>Hello World, this is a background text</BackgroundText>
+  ));
+
+storiesOf('UI Building Blocks/AlertMessage', module)
+  .addDecorator(paperDecorator)
+  .addDecorator(muiDecorator)
+  .add('default', () => (
+    <AlertMessage kind="info">Hello World, this is an alert text</AlertMessage>
+  ))
+  .add('default with button', () => (
+    <AlertMessage kind="info" onHide={() => {}}>
+      Hello World, this is an alert text
+    </AlertMessage>
+  ))
+  .add('long text', () => (
+    <AlertMessage kind="info">
+      Hello World, this is a long alert text. Lorem ipsum dolor sit amet, at
+      cibo erroribus sed, sea in meis laoreet. Has modus epicuri ne, dicat
+      nostrum eos ne, elit virtute appetere cu sea. Ut nec erat maluisset
+      argumentum, duo integre propriae ut. Sed cu eius sonet verear, ne sit
+      legendos senserit. Ne mel mundi perpetua dissentiunt. Nec ei nusquam
+      inimicus.
+    </AlertMessage>
+  ))
+  .add('long text with button', () => (
+    <AlertMessage kind="info" onHide={() => {}}>
+      Hello World, this is a long alert text. Lorem ipsum dolor sit amet, at
+      cibo erroribus sed, sea in meis laoreet. Has modus epicuri ne, dicat
+      nostrum eos ne, elit virtute appetere cu sea. Ut nec erat maluisset
+      argumentum, duo integre propriae ut. Sed cu eius sonet verear, ne sit
+      legendos senserit. Ne mel mundi perpetua dissentiunt. Nec ei nusquam
+      inimicus.
+    </AlertMessage>
+  ))
+  .add('warning', () => (
+    <AlertMessage kind="warning">
+      Hello World, this is an alert text
+    </AlertMessage>
   ));
 
 storiesOf('UI Building Blocks/ColorField', module)
@@ -325,6 +370,24 @@ storiesOf('ParameterFields', module)
   .add('ExpressionField', () => (
     <ValueStateHolder
       initialValue={'MySpriteObject.X() + MouseX("", 0)'}
+      render={(value, onChange) => (
+        <ExpressionField
+          project={project}
+          layout={testLayout}
+          globalObjectsContainer={project}
+          objectsContainer={testLayout}
+          value={value}
+          onChange={onChange}
+          parameterRenderingService={ParameterRenderingService}
+        />
+      )}
+    />
+  ))
+  .add('ExpressionField (with errors)', () => (
+    <ValueStateHolder
+      initialValue={
+        'Test()+3-Test()+3-Test()+3-Test()+3-Test()+3-Test()+3-Test()+3-Test()+3\n-Test2()+3-/2//2 \n+ 3()'
+      }
       render={(value, onChange) => (
         <ExpressionField
           project={project}
@@ -579,27 +642,27 @@ storiesOf('LocalExport', module)
   .addDecorator(paperDecorator)
   .addDecorator(muiDecorator)
   .add('default', () => (
-    <I18nextProvider i18n={i18n}>
+    <GDI18nProvider language="en">
       <LocalExport open project={project} onClose={action('close')} />
-    </I18nextProvider>
+    </GDI18nProvider>
   ));
 
 storiesOf('LocalS3Export', module)
   .addDecorator(paperDecorator)
   .addDecorator(muiDecorator)
   .add('default', () => (
-    <I18nextProvider i18n={i18n}>
+    <GDI18nProvider language="en">
       <LocalS3Export open project={project} onClose={action('close')} />
-    </I18nextProvider>
+    </GDI18nProvider>
   ));
 
 storiesOf('LocalCordovaExport', module)
   .addDecorator(paperDecorator)
   .addDecorator(muiDecorator)
   .add('default', () => (
-    <I18nextProvider i18n={i18n}>
+    <GDI18nProvider language="en">
       <LocalCordovaExport project={project} />
-    </I18nextProvider>
+    </GDI18nProvider>
   ));
 
 storiesOf('BuildStepsProgress', module)
@@ -826,7 +889,10 @@ storiesOf('LocalFilePicker', module)
 
 storiesOf('StartPage', module)
   .addDecorator(muiDecorator)
-  .add('default', () => <StartPage />);
+  .addDecorator(i18nProviderDecorator)
+  .add('default', () => (
+    <StartPage onOpenLanguageDialog={action('open language dialog')} />
+  ));
 
 storiesOf('DebuggerContent', module)
   .addDecorator(muiDecorator)
@@ -999,7 +1065,8 @@ storiesOf('EventsSheet', module)
           onOpenExternalEvents={action('Open external events')}
           resourceSources={[]}
           onChooseResource={source =>
-            action('Choose resource from source', source)}
+            action('Choose resource from source', source)
+          }
           resourceExternalEditors={[]}
           onOpenDebugger={action('open debugger')}
           onOpenLayout={action('open layout')}
@@ -1008,6 +1075,7 @@ storiesOf('EventsSheet', module)
           setToolbar={() => {}}
           showNetworkPreviewButton={false}
           showPreviewButton={false}
+          openInstructionOrExpression={action('open instruction or expression')}
         />
       </div>
     </DragDropContextProvider>
@@ -1024,7 +1092,8 @@ storiesOf('EventsSheet', module)
           onOpenExternalEvents={action('Open external events')}
           resourceSources={[]}
           onChooseResource={source =>
-            action('Choose resource from source', source)}
+            action('Choose resource from source', source)
+          }
           resourceExternalEditors={[]}
           onOpenDebugger={action('open debugger')}
           onOpenLayout={action('open layout')}
@@ -1033,6 +1102,7 @@ storiesOf('EventsSheet', module)
           setToolbar={() => {}}
           showNetworkPreviewButton={false}
           showPreviewButton={false}
+          openInstructionOrExpression={action('open instruction or expression')}
         />
       </div>
     </DragDropContextProvider>
@@ -1117,6 +1187,7 @@ storiesOf('InstructionEditor', module)
         return Promise.reject();
       }}
       resourceSources={[]}
+      openInstructionOrExpression={action('open instruction or expression')}
     />
   ))
   .add('without layout', () => (
@@ -1133,6 +1204,7 @@ storiesOf('InstructionEditor', module)
         return Promise.reject();
       }}
       resourceSources={[]}
+      openInstructionOrExpression={action('open instruction or expression')}
     />
   ));
 
@@ -1155,7 +1227,8 @@ storiesOf('TiledSpriteEditor', module)
         project={project}
         resourceSources={[]}
         onChooseResource={source =>
-          action('Choose resource from source', source)}
+          action('Choose resource from source', source)
+        }
         resourceExternalEditors={[]}
       />
     </SerializedObjectDisplay>
@@ -1171,7 +1244,8 @@ storiesOf('PanelSpriteEditor', module)
         project={project}
         resourceSources={[]}
         onChooseResource={source =>
-          action('Choose resource from source', source)}
+          action('Choose resource from source', source)
+        }
         resourceExternalEditors={[]}
       />
     </SerializedObjectDisplay>
@@ -1187,7 +1261,8 @@ storiesOf('SpriteEditor and related editors', module)
         project={project}
         resourceSources={[]}
         onChooseResource={source =>
-          action('Choose resource from source', source)}
+          action('Choose resource from source', source)
+        }
         resourceExternalEditors={[]}
       />
     </SerializedObjectDisplay>
@@ -1309,6 +1384,9 @@ storiesOf('InstancePropertiesEditor', module)
         project={project}
         layout={testLayout}
         instances={[testLayoutInstance1]}
+        editInstanceVariables={action('edit instance variables')}
+        editObjectVariables={action('edit object variables')}
+        onEditObjectByName={action('edit object')}
       />
     </SerializedObjectDisplay>
   ));
@@ -1359,6 +1437,48 @@ storiesOf('ErrorBoundary', module)
   .addDecorator(muiDecorator)
   .add('default', () => (
     <ErrorFallbackComponent componentStack="Fake stack" error={fakeError} />
+  ));
+
+storiesOf('Changelog', module)
+  .addDecorator(paperDecorator)
+  .addDecorator(muiDecorator)
+  .add('no breaking changes in this version (but in a previous)', () => (
+    <ChangelogRenderer
+      releases={[release, releaseWithBreakingChange]}
+      error={null}
+      currentReleaseName="5.0.0-beta62"
+    />
+  ))
+  .add('breaking changes in this version', () => (
+    <ChangelogRenderer
+      releases={[releaseWithBreakingChange]}
+      error={null}
+      currentReleaseName="5.0.0-beta60"
+    />
+  ))
+  .add('release without a description', () => (
+    <ChangelogRenderer
+      releases={[releaseWithoutDescription]}
+      error={null}
+      currentReleaseName="5.0.0-beta60"
+    />
+  ))
+  .add('loading', () => (
+    <ChangelogRenderer
+      releases={null}
+      error={null}
+      currentReleaseName="5.0.0-beta62"
+    />
+  ))
+  .add('with error', () => (
+    <ChangelogRenderer
+      releases={null}
+      error={new Error('Fake error')}
+      currentReleaseName="5.0.0-beta62"
+    />
+  ))
+  .add('complete changelog dialog', () => (
+    <ChangelogDialog open onClose={action('close dialog')} />
   ));
 
 storiesOf('CreateProfile', module)
@@ -1580,6 +1700,7 @@ storiesOf('SubscriptionCheckDialog', module)
     <RefGetter onRef={ref => ref.checkHasSubscription()}>
       <SubscriptionCheckDialog
         title="Preview over wifi"
+        id="Preview over wifi"
         userProfile={fakeNoSubscriptionUserProfile}
         onChangeSubscription={action('change subscription')}
         mode="try"
@@ -1590,6 +1711,7 @@ storiesOf('SubscriptionCheckDialog', module)
     <RefGetter onRef={ref => ref.checkHasSubscription()}>
       <SubscriptionCheckDialog
         title="Preview over wifi"
+        id="Preview over wifi"
         userProfile={fakeNoSubscriptionUserProfile}
         onChangeSubscription={action('change subscription')}
         mode="mandatory"
@@ -1682,8 +1804,11 @@ storiesOf('EventsFunctionsExtensionEditor/index', module)
           setToolbar={() => {}}
           resourceSources={[]}
           onChooseResource={source =>
-            action('Choose resource from source', source)}
+            action('Choose resource from source', source)
+          }
           resourceExternalEditors={[]}
+          openInstructionOrExpression={action('open instruction or expression')}
+          initiallyFocusedFunctionName={null}
         />
       </div>
     </DragDropContextProvider>
@@ -1731,7 +1856,6 @@ storiesOf('ProjectManager', module)
       onOpenResources={action('onOpenResources')}
       onOpenPlatformSpecificAssets={action('onOpenPlatformSpecificAssets')}
       onChangeSubscription={action('onChangeSubscription')}
-      showEventsFunctionsExtensions={true}
       eventsFunctionsExtensionsError={null}
       onReloadEventsFunctionsExtensions={action(
         'onReloadEventsFunctionsExtensions'
@@ -1769,7 +1893,6 @@ storiesOf('ProjectManager', module)
       onOpenResources={action('onOpenResources')}
       onOpenPlatformSpecificAssets={action('onOpenPlatformSpecificAssets')}
       onChangeSubscription={action('onChangeSubscription')}
-      showEventsFunctionsExtensions={true}
       eventsFunctionsExtensionsError={
         new Error('Fake error during code generation')
       }

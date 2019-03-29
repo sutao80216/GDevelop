@@ -1,4 +1,6 @@
 // @flow
+import { Trans } from '@lingui/macro';
+
 import * as React from 'react';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
@@ -130,7 +132,7 @@ export default class DocSearchArea extends React.Component<Props, State> {
         <TextField
           id={'help-finder-search-bar'}
           fullWidth
-          hintText={'Enter what you want to build.'}
+          hintText={<Trans>Enter what you want to build.</Trans>}
           value={this.props.value}
           onChange={(e, text) => this.props.onChange(text)}
         />
@@ -148,14 +150,21 @@ export default class DocSearchArea extends React.Component<Props, State> {
           </List>
         ) : (
           <React.Fragment>
-            <p>Examples:</p>
+            <p>
+              <Trans>Examples:</Trans>
+            </p>
             <Column expand>
               <p>
-                Coins in platformer<br />
-                Export on Android<br />
-                Add a score<br />
-                Move enemies<br />
-                ...<br />
+                Coins in platformer
+                <br />
+                Export on Android
+                <br />
+                Add a score
+                <br />
+                Move enemies
+                <br />
+                ...
+                <br />
               </p>
             </Column>
           </React.Fragment>
@@ -164,7 +173,7 @@ export default class DocSearchArea extends React.Component<Props, State> {
           This search is powered by{' '}
           <FlatButton
             onClick={() => Window.openExternalURL('http://algolia.com/')}
-            label="Algolia"
+            label={'Algolia'}
           />
         </p>
       </div>

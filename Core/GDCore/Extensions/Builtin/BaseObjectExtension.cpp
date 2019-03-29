@@ -176,15 +176,16 @@ void GD_CORE_API BuiltinExtensionsImplementer::ImplementsBaseObjectExtension(
       .AddCodeOnlyParameter("currentScene", "")
       .MarkAsAdvanced();
 
-  obj.AddAction("AddForceXY",
-                _("Add a force"),
-                _("Add a force to an object. The object will move according to "
-                  "all of the forces it has."),
-                _("Add to _PARAM0_ _PARAM3_ force of _PARAM1_ p/s on X axis and "
-                  "_PARAM2_ p/s on Y axis"),
-                _("Movement"),
-                "res/actions/force24.png",
-                "res/actions/force.png")
+  obj.AddAction(
+         "AddForceXY",
+         _("Add a force"),
+         _("Add a force to an object. The object will move according to "
+           "all of the forces it has."),
+         _("Add to _PARAM0_ _PARAM3_ force of _PARAM1_ p/s on X axis and "
+           "_PARAM2_ p/s on Y axis"),
+         _("Movement"),
+         "res/actions/force24.png",
+         "res/actions/force.png")
 
       .AddParameter("object", _("Object"))
       .AddParameter("expression", _("Speed on X axis (in pixels per second)"))
@@ -551,13 +552,14 @@ void GD_CORE_API BuiltinExtensionsImplementer::ImplementsBaseObjectExtension(
       .AddParameter("yesorno", _("Activate?"))
       .MarkAsAdvanced();
 
-  obj.AddAction("AddForceVers",
-                _("Add a force to move toward an object"),
-                _("Add a force to an object to make it move toward another."),
-                _("Move _PARAM0_ to _PARAM1_ with _PARAM3_ force of _PARAM2_ pixels"),
-                _("Movement"),
-                "res/actions/forceVers24.png",
-                "res/actions/forceVers.png")
+  obj.AddAction(
+         "AddForceVers",
+         _("Add a force to move toward an object"),
+         _("Add a force to an object to make it move toward another."),
+         _("Move _PARAM0_ to _PARAM1_ with _PARAM3_ force of _PARAM2_ pixels"),
+         _("Movement"),
+         "res/actions/forceVers24.png",
+         "res/actions/forceVers.png")
 
       .AddParameter("object", _("Object"))
       .AddParameter("objectPtr", _("Target Object"))
@@ -640,6 +642,12 @@ void GD_CORE_API BuiltinExtensionsImplementer::ImplementsBaseObjectExtension(
 
       .AddParameter("object", _("Object"))
       .AddParameter("objectList", _("Objects"))
+      .AddParameter("yesorno",
+                    _("Ignore objects that are touching each other on their "
+                      "edges, but are not overlapping (default: no)"),
+                    "",
+                    true)
+      .SetDefaultValue("no")
       .MarkAsSimple();
 
   obj.AddCondition("CollisionPoint",
@@ -654,13 +662,14 @@ void GD_CORE_API BuiltinExtensionsImplementer::ImplementsBaseObjectExtension(
       .AddParameter("expression", _("Y position of the point"))
       .MarkAsSimple();
 
-  obj.AddCondition("ObjectTimer",
-                   _("Value of a timer"),
-                   _("Test the elapsed time of a timer."),
-                   _("The timer _PARAM1_ of _PARAM0_ is greater than _PARAM2_ seconds"),
-                   _("Timers"),
-                   "res/conditions/timer24.png",
-                   "res/conditions/timer.png")
+  obj.AddCondition(
+         "ObjectTimer",
+         _("Value of a timer"),
+         _("Test the elapsed time of a timer."),
+         _("The timer _PARAM1_ of _PARAM0_ is greater than _PARAM2_ seconds"),
+         _("Timers"),
+         "res/conditions/timer24.png",
+         "res/conditions/timer.png")
       .AddParameter("object", _("Object"))
       .AddParameter("string", _("Timer's name"))
       .AddParameter("expression", _("Time in seconds"));
@@ -863,10 +872,10 @@ void GD_CORE_API BuiltinExtensionsImplementer::ImplementsBaseObjectExtension(
       .AddParameter("objectvar", _("Variable"));
 
   obj.AddExpression("ObjectTimerElapsedTime",
-                     _("Timer value"),
-                     _("Value of a timer"),
-                     _("Timers"),
-                     "res/actions/time.png")
+                    _("Timer value"),
+                    _("Value of a timer"),
+                    _("Timers"),
+                    "res/actions/time.png")
       .AddParameter("object", _("Object"))
       .AddParameter("string", _("Timer's name"));
 
@@ -911,8 +920,10 @@ void GD_CORE_API BuiltinExtensionsImplementer::ImplementsBaseObjectExtension(
   extension
       .AddAction("AjoutObjConcern",
                  _("Pick all objects"),
-                 _("Pick all objects with this name."),
-                 _("Pick all _PARAM1_"),
+                 _("Pick all the specified objects. When you pick all objects, "
+                   "the next conditions and actions of this event work on all "
+                   "of them."),
+                 _("Pick all _PARAM1_ objects"),
                  _("Objects"),
                  "res/actions/add24.png",
                  "res/actions/add.png")
@@ -921,13 +932,16 @@ void GD_CORE_API BuiltinExtensionsImplementer::ImplementsBaseObjectExtension(
       .MarkAsAdvanced();
 
   extension
-      .AddAction("AjoutHasard",
-                 _("Pick a random object"),
-                 _("Pick only one object with this name, among all"),
-                 _("Pick a random _PARAM1_"),
-                 _("Objects"),
-                 "res/actions/ajouthasard24.png",
-                 "res/actions/ajouthasard.png")
+      .AddAction(
+          "AjoutHasard",
+          _("Pick a random object"),
+          _("Pick one object from all the specified objects. When an object "
+            "is picked, the next conditions and actions of this event work "
+            "only on that object."),
+          _("Pick a random _PARAM1_"),
+          _("Objects"),
+          "res/actions/ajouthasard24.png",
+          "res/actions/ajouthasard.png")
       .AddCodeOnlyParameter("currentScene", "")
       .AddParameter("objectList", _("Object"))
       .MarkAsSimple();
@@ -977,25 +991,31 @@ void GD_CORE_API BuiltinExtensionsImplementer::ImplementsBaseObjectExtension(
       .MarkAsSimple();
 
   extension
-      .AddCondition("AjoutObjConcern",
-                    _("Pick all objects"),
-                    _("Pick all objects with this name."),
-                    _("Pick all _PARAM1_"),
-                    _("Objects"),
-                    "res/conditions/add24.png",
-                    "res/conditions/add.png")
+      .AddCondition(
+          "AjoutObjConcern",
+          _("Pick all objects"),
+          _("Pick all the specified objects. When you pick all objects, "
+            "the next conditions and actions of this event work on all "
+            "of them."),
+          _("Pick all _PARAM1_ objects"),
+          _("Objects"),
+          "res/conditions/add24.png",
+          "res/conditions/add.png")
       .AddCodeOnlyParameter("currentScene", "")
       .AddParameter("objectList", _("Object"))
       .MarkAsAdvanced();
 
   extension
-      .AddCondition("AjoutHasard",
-                    _("Pick a random object"),
-                    _("Pick only one object with this name, among all"),
-                    _("Pick a random _PARAM1_"),
-                    _("Objects"),
-                    "res/conditions/ajouthasard24.png",
-                    "res/conditions/ajouthasard.png")
+      .AddCondition(
+          "AjoutHasard",
+          _("Pick a random object"),
+          _("Pick one object from all the specified objects. When an object "
+            "is picked, the next conditions and actions of this event work "
+            "only on that object."),
+          _("Pick a random _PARAM1_"),
+          _("Objects"),
+          "res/conditions/ajouthasard24.png",
+          "res/conditions/ajouthasard.png")
       .AddCodeOnlyParameter("currentScene", "")
       .AddParameter("objectList", _("Object"))
       .MarkAsSimple();
@@ -1004,9 +1024,10 @@ void GD_CORE_API BuiltinExtensionsImplementer::ImplementsBaseObjectExtension(
       .AddCondition(
           "PickNearest",
           _("Pick nearest object"),
-          _("Among the objects, pick the one that is nearest (or furthest if "
-            "condition is inverted) from the specified position."),
-          _("Pick nearest _PARAM0_ to _PARAM1_;_PARAM2_"),
+          _("Pick the object of this type that is nearest to the specified "
+            "position. If the condition is inverted, the object farthest from "
+            "the specified position is picked instead."),
+          _("Pick the _PARAM0_ that is nearest to _PARAM1_;_PARAM2_"),
           _("Objects"),
           "res/conditions/distance24.png",
           "res/conditions/distance.png")
@@ -1017,13 +1038,17 @@ void GD_CORE_API BuiltinExtensionsImplementer::ImplementsBaseObjectExtension(
       .MarkAsSimple();
 
   extension
-      .AddCondition("NbObjet",
-                    _("Objects count"),
-                    _("Compare the number of picked objects"),
-                    _("The number of _PARAM0_ is _PARAM1__PARAM2_"),
-                    _("Objects"),
-                    "res/conditions/nbObjet24.png",
-                    "res/conditions/nbObjet.png")
+      .AddCondition(
+          "NbObjet",
+          _("Number of objects"),
+          _("Count how many of the specified objects are currently picked, and "
+            "compare that number to a value. If previous conditions on the "
+            "objects have not been used, this condition counts how many of "
+            "these objects exist in the current scene."),
+          _("The number of _PARAM0_ objects is _PARAM1__PARAM2_"),
+          _("Objects"),
+          "res/conditions/nbObjet24.png",
+          "res/conditions/nbObjet.png")
       .AddParameter("objectList", _("Object"))
       .AddParameter("relationalOperator", _("Sign of the test"))
       .AddParameter("expression", _("Value to test"))
@@ -1046,6 +1071,13 @@ void GD_CORE_API BuiltinExtensionsImplementer::ImplementsBaseObjectExtension(
       .AddParameter("objectList", _("Object"))
       .AddParameter("objectList", _("Object"))
       .AddCodeOnlyParameter("conditionInverted", "")
+      .AddCodeOnlyParameter("currentScene", "")
+      .AddParameter("yesorno",
+                    _("Ignore objects that are touching each other on their "
+                      "edges, but are not overlapping (default: no)"),
+                    "",
+                    true)
+      .SetDefaultValue("no")
       .MarkAsSimple();
 
   extension
@@ -1119,12 +1151,12 @@ void GD_CORE_API BuiltinExtensionsImplementer::ImplementsBaseObjectExtension(
       .MarkAsAdvanced();
 
   extension
-      .AddExpression(
-          "Count",
-          _("Number of objects"),
-          _("Count the number of the specified objects currently picked"),
-          _("Objects"),
-          "res/conditions/nbObjet.png")
+      .AddExpression("Count",
+                     _("Number of objects"),
+                     _("Count the number of the specified objects being "
+                       "currently picked in the event"),
+                     _("Objects"),
+                     "res/conditions/nbObjet.png")
       .AddParameter("objectList", _("Object"));
 
   obj.AddStrExpression("ObjectName",

@@ -1,5 +1,5 @@
 import RenderedInstance from './RenderedInstance';
-import PIXI from 'pixi.js';
+import * as PIXI from 'pixi.js';
 import { rgbToHexNumber } from '../../Utils/ColorTransformer';
 const gd = global.gd;
 
@@ -63,10 +63,10 @@ RenderedParticleEmitterInstance.prototype.updateGraphics = function() {
 
   this._pixiObject.clear();
 
-  const emitterAngle = this._instance.getAngle() / 180 * 3.14159;
+  const emitterAngle = (this._instance.getAngle() / 180) * 3.14159;
   const sprayConeAngle = particleEmitterObject.getConeSprayAngle();
-  const line1Angle = emitterAngle - sprayConeAngle / 2.0 / 180.0 * 3.14159;
-  const line2Angle = emitterAngle + sprayConeAngle / 2.0 / 180.0 * 3.14159;
+  const line1Angle = emitterAngle - (sprayConeAngle / 2.0 / 180.0) * 3.14159;
+  const line2Angle = emitterAngle + (sprayConeAngle / 2.0 / 180.0) * 3.14159;
   const length = 64;
 
   this._pixiObject.beginFill(0, 0);

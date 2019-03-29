@@ -1,3 +1,4 @@
+import { Trans } from '@lingui/macro';
 import React, { Component } from 'react';
 import FlatButton from 'material-ui/FlatButton';
 import EmptyMessage from '../../../../UI/EmptyMessage';
@@ -230,48 +231,56 @@ export default class CollisionMasksEditor extends Component {
                 this._setSameCollisionMasksForAllAnimations
               }
               setSameForAllSprites={this._setSameCollisionMasksForAllSprites}
-              setSameForAllAnimationsLabel="Share same collision masks for all animations"
-              setSameForAllSpritesLabel="Share same collision masks for all sprites of this animation"
+              setSameForAllAnimationsLabel={
+                <Trans>Share same collision masks for all animations</Trans>
+              }
+              setSameForAllSpritesLabel={
+                <Trans>
+                  Share same collision masks for all sprites of this animation
+                </Trans>
+              }
             />
           </Column>
         </Line>
-        {!!sprite &&
-          !sprite.isCollisionMaskAutomatic() && (
-            <React.Fragment>
-              <PolygonsList
-                polygons={sprite.getCustomCollisionMask()}
-                onPolygonsUpdated={this._updateCollisionMasks}
-                spriteWidth={spriteWidth}
-                spriteHeight={spriteHeight}
+        {!!sprite && !sprite.isCollisionMaskAutomatic() && (
+          <React.Fragment>
+            <PolygonsList
+              polygons={sprite.getCustomCollisionMask()}
+              onPolygonsUpdated={this._updateCollisionMasks}
+              spriteWidth={spriteWidth}
+              spriteHeight={spriteHeight}
+            />
+            <Line justifyContent="center">
+              <FlatButton
+                label={<Trans>Restore the default collision mask</Trans>}
+                primary={false}
+                onClick={() => this._onSetCollisionMaskAutomatic(true)}
               />
-              <Line justifyContent="center">
-                <FlatButton
-                  label="Restore the default collision mask"
-                  primary={false}
-                  onClick={() => this._onSetCollisionMaskAutomatic(true)}
-                />
-              </Line>
-            </React.Fragment>
-          )}
-        {!!sprite &&
-          sprite.isCollisionMaskAutomatic() && (
-            <React.Fragment>
-              <EmptyMessage>
+            </Line>
+          </React.Fragment>
+        )}
+        {!!sprite && sprite.isCollisionMaskAutomatic() && (
+          <React.Fragment>
+            <EmptyMessage>
+              <Trans>
                 This sprite uses the default collision mask, a rectangle that is
                 as large as the sprite.
-              </EmptyMessage>
-              <Line justifyContent="center">
-                <FlatButton
-                  label="Use a custom collision mask"
-                  primary={false}
-                  onClick={() => this._onSetCollisionMaskAutomatic(false)}
-                />
-              </Line>
-            </React.Fragment>
-          )}
+              </Trans>
+            </EmptyMessage>
+            <Line justifyContent="center">
+              <FlatButton
+                label={<Trans>Use a custom collision mask</Trans>}
+                primary={false}
+                onClick={() => this._onSetCollisionMaskAutomatic(false)}
+              />
+            </Line>
+          </React.Fragment>
+        )}
         {!sprite && (
           <EmptyMessage>
-            Choose an animation and frame to edit the collision masks
+            <Trans>
+              Choose an animation and frame to edit the collision masks
+            </Trans>
           </EmptyMessage>
         )}
       </div>

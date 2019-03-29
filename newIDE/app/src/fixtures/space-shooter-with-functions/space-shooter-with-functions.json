@@ -1,7 +1,7 @@
 {
   "firstLayout": "",
   "gdVersion": {
-    "build": 97,
+    "build": 98,
     "major": 4,
     "minor": 0,
     "revision": 0
@@ -14,6 +14,7 @@
     "orientation": "landscape",
     "packageName": "com.example.shooter",
     "projectFile": "/Users/florianrival/Projects/F/GD/newIDE/app/resources/examples/space-shooter-with-functions/space-shooter-with-functions.json",
+    "scaleMode": "linear",
     "sizeOnStartupMode": "adaptWidth",
     "useExternalSourceFiles": false,
     "version": "1.0.0",
@@ -2555,7 +2556,7 @@
                                             "",
                                             "EnemyBullet",
                                             "GreenEnemy.X()",
-                                            "GreenEnemy.PointY(Centre)",
+                                            "GreenEnemy.PointY(\"Centre\")",
                                             ""
                                           ],
                                           "subInstructions": []

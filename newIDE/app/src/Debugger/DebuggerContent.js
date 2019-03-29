@@ -1,4 +1,6 @@
 // @flow
+import { Trans } from '@lingui/macro';
+
 import * as React from 'react';
 import EditorMosaic, { MosaicWindow } from '../UI/EditorMosaic';
 import Background from '../UI/Background';
@@ -55,7 +57,7 @@ export default class DebuggerContent extends React.Component<Props, State> {
 
   openProfiler = () => {
     if (this._editors) this._editors.openEditor('profiler', 'bottom');
-  }
+  };
 
   render() {
     const {
@@ -76,18 +78,22 @@ export default class DebuggerContent extends React.Component<Props, State> {
 
     return (
       <EditorMosaic
-        ref={editors => this._editors = editors}
+        ref={editors => (this._editors = editors)}
         editors={{
           inspectors: (
             <MosaicWindow
-              title="Inspectors"
+              title={<Trans>Inspectors</Trans>}
               toolbarControls={[]}
               gameData={gameData}
             >
               <Background>
                 <Column expand noMargin>
                   <Line justifyContent="center">
-                    <RaisedButton label="Refresh" onClick={onRefresh} primary />
+                    <RaisedButton
+                      label={<Trans>Refresh</Trans>}
+                      onClick={onRefresh}
+                      primary
+                    />
                   </Line>
                   <Line expand noMargin>
                     <InspectorsList
@@ -100,7 +106,8 @@ export default class DebuggerContent extends React.Component<Props, State> {
                         this.setState({
                           selectedInspector,
                           selectedInspectorFullPath,
-                        })}
+                        })
+                      }
                     />
                   </Line>
                 </Column>
@@ -115,7 +122,8 @@ export default class DebuggerContent extends React.Component<Props, State> {
                   <RawContentInspector
                     gameData={get(gameData, selectedInspectorFullPath, null)}
                     onEdit={(path, newValue) =>
-                      onEdit(selectedInspectorFullPath.concat(path), newValue)}
+                      onEdit(selectedInspectorFullPath.concat(path), newValue)
+                    }
                   />
                 ) : (
                   selectedInspector.renderInspector(
@@ -131,8 +139,10 @@ export default class DebuggerContent extends React.Component<Props, State> {
                     }
                   ) || (
                     <EmptyMessage>
-                      No inspector, choose another element in the list or toggle
-                      the raw data view.
+                      <Trans>
+                        No inspector, choose another element in the list or
+                        toggle the raw data view.
+                      </Trans>
                     </EmptyMessage>
                   )
                 )
@@ -154,7 +164,8 @@ export default class DebuggerContent extends React.Component<Props, State> {
                       onCheck={(e, enabled) =>
                         this.setState({
                           rawMode: enabled,
-                        })}
+                        })
+                      }
                     />
                   </div>
                 </Line>
@@ -163,7 +174,7 @@ export default class DebuggerContent extends React.Component<Props, State> {
           ),
           profiler: (
             <MosaicWindow
-              title="Profiler"
+              title={<Trans>Profiler</Trans>}
               // Pass profilerOutput to force MosaicWindow update when profilerOutput is changed
               profilerOutput={profilerOutput}
               profilingInProgress={profilingInProgress}

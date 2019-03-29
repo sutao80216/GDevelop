@@ -1,4 +1,6 @@
 // @flow
+import { Trans } from '@lingui/macro';
+
 import * as React from 'react';
 import ReactJsonView from 'react-json-view';
 import {
@@ -111,7 +113,9 @@ export default class RuntimeSceneInspector extends React.Component<
 
     return (
       <div style={styles.container}>
-        <p>Layers:</p>
+        <p>
+          <Trans>Layers:</Trans>
+        </p>
         <ReactJsonView
           collapsed={false}
           name={false}
@@ -123,46 +127,50 @@ export default class RuntimeSceneInspector extends React.Component<
           groupArraysAfterLength={50}
           theme="monokai"
         />
-        <p>Create a new instance on the scene (will be at position 0;0):</p>
-        {runtimeScene._objects &&
-          runtimeScene._objects.items && (
-            <Line noMargin alignItems="baseline">
-              <AutoComplete
-                {...defaultAutocompleteProps}
-                hintText="Enter the name of the object"
-                searchText={this.state.newObjectName}
-                onUpdateInput={value => {
+        <p>
+          <Trans>
+            Create a new instance on the scene (will be at position 0;0):
+          </Trans>
+        </p>
+        {runtimeScene._objects && runtimeScene._objects.items && (
+          <Line noMargin alignItems="baseline">
+            <AutoComplete
+              {...defaultAutocompleteProps}
+              hintText={<Trans>Enter the name of the object</Trans>}
+              searchText={this.state.newObjectName}
+              onUpdateInput={value => {
+                this.setState({
+                  newObjectName: value,
+                });
+              }}
+              onNewRequest={data => {
+                // Note that data may be a string or a {text, value} object.
+                if (typeof data === 'string') {
                   this.setState({
-                    newObjectName: value,
+                    newObjectName: data,
                   });
-                }}
-                onNewRequest={data => {
-                  // Note that data may be a string or a {text, value} object.
-                  if (typeof data === 'string') {
-                    this.setState({
-                      newObjectName: data,
-                    });
-                  } else if (typeof data.value === 'string') {
-                    this.setState({
-                      newObjectName: data.value,
-                    });
-                  }
-                }}
-                dataSource={Object.keys(
-                  runtimeScene._objects.items
-                ).map(objectName => ({
+                } else if (typeof data.value === 'string') {
+                  this.setState({
+                    newObjectName: data.value,
+                  });
+                }
+              }}
+              dataSource={Object.keys(runtimeScene._objects.items).map(
+                objectName => ({
                   text: objectName,
                   value: objectName,
-                }))}
-              />
-              <RaisedButton
-                label="Create"
-                primary
-                onClick={() =>
-                  onCall(['createObject'], [this.state.newObjectName])}
-              />
-            </Line>
-          )}
+                })
+              )}
+            />
+            <RaisedButton
+              label={<Trans>Create</Trans>}
+              primary
+              onClick={() =>
+                onCall(['createObject'], [this.state.newObjectName])
+              }
+            />
+          </Line>
+        )}
       </div>
     );
   }

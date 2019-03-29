@@ -4,6 +4,7 @@ import './Mosaic.css';
 import './EventsSheet.css';
 import 'react-virtualized/styles.css'; // Styles for react-virtualized Table
 import './Table.css';
+import './Markdown.css';
 
 const gdevelopPurple = '#9100ce';
 const gdevelopLightBlue = '#4ab0e4';
@@ -75,9 +76,12 @@ const theme = {
   listItem: {
     groupBackgroundColor: backgroundColor,
     groupTextColor: 'rgba(0,0,0,0.54)',
+    deprecatedGroupTextColor: 'rgba(0,0,0,0.30)',
     separatorColor: '#e0e0e0',
     selectedBackgroundColor: systemSelectionColor,
     selectedTextColor: '#ffffff',
+    errorTextColor: '#ff2e16',
+    selectedErrorBackgroundColor: '#ff2e16',
   },
   emptyMessage: {
     shadowColor: '#FFFFFF',
@@ -85,9 +89,10 @@ const theme = {
   logo: {
     src: 'res/GD-logo-big.png',
   },
-  mosaicRootClassName: 'mosaic-gd-default-theme',
-  eventsSheetRootClassName: 'gd-events-sheet-default-theme',
-  tableRootClassName: 'gd-table-default-theme',
+  mosaicRootClassName: 'mosaic-gd-default-theme', // See Mosaic.css
+  eventsSheetRootClassName: 'gd-events-sheet-default-theme', // See EventsSheet.css
+  tableRootClassName: 'gd-table-default-theme', // See Table.css
+  markdownRootClassName: 'gd-markdown-default-theme', // See Markdown.css
   gdevelopIconsCSSFilter: '',
 };
 

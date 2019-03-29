@@ -1,7 +1,7 @@
 {
   "firstLayout": "",
   "gdVersion": {
-    "build": 97,
+    "build": 98,
     "major": 4,
     "minor": 0,
     "revision": 0
@@ -14,6 +14,7 @@
     "orientation": "default",
     "packageName": "com.example.gamename",
     "projectFile": "C:\\Users\\szoszo\\Desktop\\Projects\\gametemplates\\gdevelop5\\toggle-music-play-sound\\game.json",
+    "scaleMode": "linear",
     "sizeOnStartupMode": "",
     "useExternalSourceFiles": false,
     "version": "1.0.0",
@@ -802,9 +803,9 @@
               "parameters": [
                 "slider_button",
                 "=",
-                "volume_slider.PointX(button)",
+                "volume_slider.PointX(\"button\")",
                 "=",
-                "volume_slider.PointY(button)"
+                "volume_slider.PointY(\"button\")"
               ],
               "subInstructions": []
             }
@@ -935,7 +936,7 @@
               "parameters": [
                 "slider_button",
                 ">=",
-                "volume_slider.PointX(button)"
+                "volume_slider.PointX(\"button\")"
               ],
               "subInstructions": []
             }
@@ -981,7 +982,7 @@
               "parameters": [
                 "slider_button",
                 "<",
-                "volume_slider.PointX(button)"
+                "volume_slider.PointX(\"button\")"
               ],
               "subInstructions": []
             }

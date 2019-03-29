@@ -1,3 +1,4 @@
+import { Trans } from '@lingui/macro';
 import React, { Component } from 'react';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
@@ -21,12 +22,12 @@ export default class SetupGridDialog extends Component {
   render() {
     const actions = [
       <FlatButton
-        label="Cancel"
+        label={<Trans>Cancel</Trans>}
         primary={false}
         onClick={this.props.onCancel}
       />,
       <FlatButton
-        label="Apply"
+        label={<Trans>Apply</Trans>}
         primary={true}
         keyboardFocused={true}
         onClick={this._onApply}
@@ -41,32 +42,36 @@ export default class SetupGridDialog extends Component {
         autoScrollBodyContent={true}
       >
         <TextField
-          floatingLabelText="Cell width (in pixels)"
+          floatingLabelText={<Trans>Cell width (in pixels)</Trans>}
           type="number"
           value={this.state.gridWidth}
           onChange={(e, value) =>
-            this.setState({ gridWidth: parseInt(value, 10) })}
+            this.setState({ gridWidth: parseInt(value, 10) })
+          }
         />
         <TextField
-          floatingLabelText="Cell height (in pixels)"
+          floatingLabelText={<Trans>Cell height (in pixels)</Trans>}
           type="number"
           value={this.state.gridHeight}
           onChange={(e, value) =>
-            this.setState({ gridHeight: parseInt(value, 10) })}
+            this.setState({ gridHeight: parseInt(value, 10) })
+          }
         />
         <TextField
-          floatingLabelText="X offset (in pixels)"
+          floatingLabelText={<Trans>X offset (in pixels)</Trans>}
           type="number"
           value={this.state.gridOffsetX}
           onChange={(e, value) =>
-            this.setState({ gridOffsetX: parseInt(value, 10) })}
+            this.setState({ gridOffsetX: parseInt(value, 10) })
+          }
         />
         <TextField
-          floatingLabelText="Y offset (in pixels)"
+          floatingLabelText={<Trans>Y offset (in pixels)</Trans>}
           type="number"
           value={this.state.gridOffsetY}
           onChange={(e, value) =>
-            this.setState({ gridOffsetY: parseInt(value, 10) })}
+            this.setState({ gridOffsetY: parseInt(value, 10) })
+          }
         />
       </Dialog>
     );

@@ -1,4 +1,6 @@
 // @flow
+import { Trans } from '@lingui/macro';
+
 import * as React from 'react';
 import { mapFor } from '../../Utils/MapFor';
 import classNames from 'classnames';
@@ -129,7 +131,8 @@ class Instruction extends React.Component<Props, *> {
                 [parameterType]: true,
               })}
               onClick={domEvent =>
-                this.props.onParameterClick(domEvent, parameterIndex)}
+                this.props.onParameterClick(domEvent, parameterIndex)
+              }
             >
               {ParameterRenderingService.renderParameterString(
                 parameterType,
@@ -217,7 +220,7 @@ class Instruction extends React.Component<Props, *> {
                 this.props.onSubInstructionsListContextMenu
               }
               onParameterClick={this.props.onSubParameterClick}
-              addButtonLabel="Add a sub-condition"
+              addButtonLabel={<Trans>Add a sub-condition</Trans>}
               disabled={this.props.disabled}
             />
           )}
@@ -231,7 +234,7 @@ class Instruction extends React.Component<Props, *> {
         {instructionDiv}
       </React.Fragment>
     ) : (
-      instructionDiv
+      instructionDiv || null
     );
   }
 }
@@ -240,8 +243,13 @@ class Instruction extends React.Component<Props, *> {
 
 export const reactDndInstructionType = 'GD_DRAGGED_INSTRUCTION';
 
+type InstructionSourceProps = {
+  onClick: () => void,
+  isCondition: boolean,
+};
+
 const instructionSource = {
-  beginDrag(props) {
+  beginDrag(props: InstructionSourceProps) {
     props.onClick(); // Select the dragged instruction
     return {
       // No need to save here what is being dragged,
@@ -285,6 +293,7 @@ function targetCollect(
   };
 }
 
+// $FlowFixMe - Typing of DragSource/DropTarget is a pain to get correctly
 export default DragSource(
   reactDndInstructionType,
   instructionSource,

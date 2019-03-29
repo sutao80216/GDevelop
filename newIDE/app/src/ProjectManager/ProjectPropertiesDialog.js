@@ -1,4 +1,6 @@
 // @flow
+import { Trans } from '@lingui/macro';
+
 import * as React from 'react';
 import FlatButton from 'material-ui/FlatButton';
 import Checkbox from 'material-ui/Checkbox';
@@ -7,10 +9,10 @@ import MenuItem from 'material-ui/MenuItem';
 import Dialog from '../UI/Dialog';
 import SemiControlledTextField from '../UI/SemiControlledTextField';
 import SubscriptionChecker from '../Profile/SubscriptionChecker';
-import { translate, type TranslatorProps } from 'react-i18next';
 import { getErrors, displayProjectErrorsBox } from './ProjectErrorsChecker';
+import DismissableAlertMessage from '../UI/DismissableAlertMessage';
 
-type Props = TranslatorProps & {|
+type Props = {|
   project: gdProject,
   open: boolean,
   onClose: Function,
@@ -27,14 +29,12 @@ type State = {|
   packageName: string,
   orientation: string,
   adMobAppId: string,
+  scaleMode: 'linear' | 'nearest',
   sizeOnStartupMode: string,
   showGDevelopSplash: boolean,
 |};
 
-class ProjectPropertiesDialog extends React.Component<
-  Props,
-  State
-> {
+class ProjectPropertiesDialog extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = this._loadFrom(props.project);
@@ -52,6 +52,7 @@ class ProjectPropertiesDialog extends React.Component<
       packageName: project.getPackageName(),
       orientation: project.getOrientation(),
       adMobAppId: project.getAdMobAppId(),
+      scaleMode: project.getScaleMode(),
       sizeOnStartupMode: project.getSizeOnStartupMode(),
       showGDevelopSplash: project.getLoadingScreen().isGDevelopSplashShown(),
     };
@@ -67,7 +68,8 @@ class ProjectPropertiesDialog extends React.Component<
   }
 
   _onApply = () => {
-    const { project, t } = this.props;
+    const t = str => str; //TODO
+    const { project } = this.props;
     const {
       windowDefaultWidth,
       windowDefaultHeight,
@@ -77,6 +79,7 @@ class ProjectPropertiesDialog extends React.Component<
       packageName,
       orientation,
       adMobAppId,
+      scaleMode,
       sizeOnStartupMode,
       showGDevelopSplash,
     } = this.state;
@@ -88,6 +91,7 @@ class ProjectPropertiesDialog extends React.Component<
     project.setPackageName(packageName);
     project.setOrientation(orientation);
     project.setAdMobAppId(adMobAppId);
+    project.setScaleMode(scaleMode);
     project.setSizeOnStartupMode(sizeOnStartupMode);
     project.getLoadingScreen().showGDevelopSplash(showGDevelopSplash);
 
@@ -99,12 +103,12 @@ class ProjectPropertiesDialog extends React.Component<
   render() {
     const actions = [
       <FlatButton
-        label="Cancel"
+        label={<Trans>Cancel</Trans>}
         primary={false}
         onClick={this.props.onClose}
       />,
       <FlatButton
-        label="Apply"
+        label={<Trans>Apply</Trans>}
         primary={true}
         keyboardFocused={true}
         onClick={this._onApply}
@@ -119,9 +123,14 @@ class ProjectPropertiesDialog extends React.Component<
       packageName,
       orientation,
       adMobAppId,
+      scaleMode,
       sizeOnStartupMode,
       showGDevelopSplash,
     } = this.state;
+
+    const defaultPackageName = 'com.example.mygame';
+    const admobHint = 'ca-app-pub-XXXXXXXXXXXXXXXX/YYYYYYYYYY';
+    const defaultVersion = '1.0.0';
 
     return (
       <React.Fragment>
@@ -132,94 +141,152 @@ class ProjectPropertiesDialog extends React.Component<
           autoScrollBodyContent={true}
         >
           <SemiControlledTextField
-            floatingLabelText="Game name"
+            floatingLabelText={<Trans>Game name</Trans>}
             fullWidth
             type="text"
             value={name}
             onChange={value => this.setState({ name: value })}
           />
           <SemiControlledTextField
-            floatingLabelText="Game's window width"
+            floatingLabelText={<Trans>Game's window width</Trans>}
             fullWidth
             type="number"
             value={'' + windowDefaultWidth}
             onChange={value =>
               this.setState({
                 windowDefaultWidth: Math.max(0, parseInt(value, 10)),
-              })}
+              })
+            }
           />
           <SemiControlledTextField
-            floatingLabelText="Game's window height"
+            floatingLabelText={<Trans>Game's window height</Trans>}
             fullWidth
             type="number"
             value={'' + windowDefaultHeight}
             onChange={value =>
               this.setState({
                 windowDefaultHeight: Math.max(0, parseInt(value, 10)),
-              })}
+              })
+            }
           />
           <SemiControlledTextField
-            floatingLabelText="Author name"
+            floatingLabelText={<Trans>Author name</Trans>}
             fullWidth
-            hintText="Your name"
+            hintText={<Trans>Your name</Trans>}
             type="text"
             value={author}
             onChange={value => this.setState({ author: value })}
           />
           <SemiControlledTextField
-            floatingLabelText="Version number (X.Y.Z)"
+            floatingLabelText={<Trans>Version number (X.Y.Z)</Trans>}
             fullWidth
-            hintText="1.0.0"
+            hintText={defaultVersion}
             type="text"
             value={version}
             onChange={value => this.setState({ version: value })}
           />
           <SemiControlledTextField
-            floatingLabelText="Package name (for iOS and Android)"
+            floatingLabelText={
+              <Trans>Package name (for iOS and Android)</Trans>
+            }
             fullWidth
-            hintText="com.example.mygame"
+            hintText={defaultPackageName}
             type="text"
             value={packageName}
             onChange={value => this.setState({ packageName: value })}
           />
           <SelectField
             fullWidth
-            floatingLabelText="Device orientation (for iOS and Android)"
+            floatingLabelText={
+              <Trans>Device orientation (for iOS and Android)</Trans>
+            }
             value={orientation}
             onChange={(e, i, value) => this.setState({ orientation: value })}
           >
-            <MenuItem value="default" primaryText="Platform default" />
-            <MenuItem value="landscape" primaryText="Landscape" />
-            <MenuItem value="portrait" primaryText="Portrait" />
+            <MenuItem
+              value="default"
+              primaryText={<Trans>Platform default</Trans>}
+            />
+            <MenuItem
+              value="landscape"
+              primaryText={<Trans>Landscape</Trans>}
+            />
+            <MenuItem value="portrait" primaryText={<Trans>Portrait</Trans>} />
           </SelectField>
           <SelectField
             fullWidth
-            floatingLabelText="Fullscreen/game size mode"
+            floatingLabelText={
+              <Trans>Scale mode (also called "Sampling")</Trans>
+            }
+            floatingLabelFixed
+            value={scaleMode}
+            onChange={(e, i, value) => this.setState({ scaleMode: value })}
+          >
+            <MenuItem
+              value="linear"
+              primaryText={
+                <Trans>
+                  Linear (antialiased rendering, good for most games)
+                </Trans>
+              }
+            />
+            <MenuItem
+              value="nearest"
+              primaryText={
+                <Trans>
+                  Nearest (no antialiasing, good for pixel perfect games)
+                </Trans>
+              }
+            />
+          </SelectField>
+          {scaleMode === 'nearest' && (
+            <DismissableAlertMessage
+              identifier="use-non-smoothed-textures"
+              kind="info"
+            >
+              To obtain the best pixel-perfect effect possible, go in the
+              resources editor and disable the Smoothing for all images of your
+              game.
+            </DismissableAlertMessage>
+          )}
+          <SelectField
+            fullWidth
+            floatingLabelText={<Trans>Fullscreen/game size mode</Trans>}
             floatingLabelFixed
             value={sizeOnStartupMode}
             onChange={(e, i, value) =>
-              this.setState({ sizeOnStartupMode: value })}
+              this.setState({ sizeOnStartupMode: value })
+            }
           >
-            <MenuItem value="" primaryText="No changes to the game size" />
+            <MenuItem
+              value=""
+              primaryText={<Trans>No changes to the game size</Trans>}
+            />
             <MenuItem
               value="adaptWidth"
-              primaryText="Change width to fit the screen"
+              primaryText={<Trans>Change width to fit the screen</Trans>}
             />
             <MenuItem
               value="adaptHeight"
-              primaryText="Change height to fit the screen"
+              primaryText={<Trans>Change height to fit the screen</Trans>}
             />
           </SelectField>
           <SemiControlledTextField
-            floatingLabelText="AdMob application ID (for iOS and Android)"
+            floatingLabelText={
+              <Trans>AdMob application ID (for iOS and Android)</Trans>
+            }
             fullWidth
-            hintText="ca-app-pub-XXXXXXXXXXXXXXXX/YYYYYYYYYY"
+            hintText={admobHint}
             type="text"
             value={adMobAppId}
             onChange={value => this.setState({ adMobAppId: value })}
           />
           <Checkbox
-            label="Display GDevelop splash at startup (in exported game)"
+            label={
+              <Trans>
+                Display GDevelop splash at startup (in exported game)
+              </Trans>
+            }
             checked={showGDevelopSplash}
             onCheck={(e, checked) => {
               if (!checked) {
@@ -238,17 +305,19 @@ class ProjectPropertiesDialog extends React.Component<
         </Dialog>
         <SubscriptionChecker
           ref={subscriptionChecker =>
-            (this._subscriptionChecker = subscriptionChecker)}
+            (this._subscriptionChecker = subscriptionChecker)
+          }
           onChangeSubscription={() => {
             this.props.onClose();
             this.props.onChangeSubscription();
           }}
           mode="mandatory"
-          title="Disable GDevelop splash at startup"
+          id="Disable GDevelop splash at startup"
+          title={<Trans>Disable GDevelop splash at startup</Trans>}
         />
       </React.Fragment>
     );
   }
 }
 
-export default translate()(ProjectPropertiesDialog);
+export default ProjectPropertiesDialog;

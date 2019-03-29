@@ -1,5 +1,5 @@
 import RenderedInstance from './RenderedInstance';
-import PIXI from 'pixi.js';
+import * as PIXI from 'pixi.js';
 const gd = global.gd;
 
 /**
@@ -374,10 +374,7 @@ RenderedPanelSpriteInstance.getThumbnail = function(
 ) {
   const panelSprite = gd.asPanelSpriteObject(object);
 
-  return resourcesLoader.getResourceFullUrl(
-    project,
-    panelSprite.getTexture()
-  );
+  return resourcesLoader.getResourceFullUrl(project, panelSprite.getTexture());
 };
 
 export default RenderedPanelSpriteInstance;

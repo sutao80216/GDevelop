@@ -1,3 +1,5 @@
+// @flow
+
 import optionalRequire from './OptionalRequire.js';
 import URLSearchParams from 'url-search-params';
 import { isWindows } from './Platform';
@@ -6,16 +8,25 @@ const shell = electron ? electron.shell : null;
 const dialog = electron ? electron.remote.dialog : null;
 
 export default class Window {
-  static setTitle(title) {
+  static setTitle(title: string) {
     if (electron) {
-      const browserWindow = electron.remote.getCurrentWindow();
-      browserWindow.setTitle(title);
+      try {
+        const browserWindow = electron.remote.getCurrentWindow();
+        browserWindow.setTitle(title);
+      } catch (err) {
+        // This rarely, but sometimes happen that setTitle throw.
+        // Catch the error in the hope that things will continue to work.
+        console.error(
+          'Caught an error while calling browserWindow.setTitle',
+          err
+        );
+      }
     } else {
       document.title = title;
     }
   }
 
-  static setBounds(x, y, width, height) {
+  static setBounds(x: number, y: number, width: number, height: number) {
     if (!electron) return;
 
     let scaleFactor = 1;
@@ -49,7 +60,7 @@ export default class Window {
     browserWindow.setAlwaysOnTop(true);
   }
 
-  static hide(forceHide = false) {
+  static hide(forceHide: boolean = false) {
     if (!electron) return;
 
     const browserWindow = electron.remote.getCurrentWindow();
@@ -59,19 +70,19 @@ export default class Window {
     }
   }
 
-  static onFocus(cb) {
+  static onFocus(cb: () => void) {
     if (!electron) return;
 
     return electron.remote.getCurrentWindow().on('focus', cb);
   }
 
-  static onBlur(cb) {
+  static onBlur(cb: () => void) {
     if (!electron) return;
 
     return electron.remote.getCurrentWindow().on('blur', cb);
   }
 
-  static onClose(cb) {
+  static onClose(cb: () => void) {
     if (!electron) return;
 
     return electron.remote.getCurrentWindow().on('close', cb);
@@ -84,23 +95,28 @@ export default class Window {
    * didn't have an option associated with them (see https://github.com/substack/minimist).
    * (On the web-app, this is emulated using the "project" argument).
    */
-  static getArguments() {
+  static getArguments(): { [string]: any } {
     if (electron) {
       return electron.remote.getGlobal('args');
     }
 
     const argumentsObject = {};
     const params = new URLSearchParams(window.location.search);
-    params.forEach((value, name) => argumentsObject[name] = value);
+    params.forEach((value, name) => (argumentsObject[name] = value));
 
     // Emulate the minimist behavior of putting the arguments without option
     // in "_".
-    argumentsObject._ = argumentsObject.project ? [argumentsObject.project] : [];
+    argumentsObject._ = argumentsObject.project
+      ? [argumentsObject.project]
+      : [];
 
     return argumentsObject;
   }
 
-  static showMessageBox(message, type) {
+  static showMessageBox(
+    message: string,
+    type?: 'none' | 'info' | 'error' | 'question' | 'warning'
+  ) {
     if (!dialog || !electron) {
       alert(message);
       return;
@@ -110,6 +126,7 @@ export default class Window {
     dialog.showMessageBox(browserWindow, {
       message,
       type,
+      buttons: ['OK'],
     });
   }
 
@@ -132,11 +149,11 @@ export default class Window {
         // visible selection has changed. Try to wait to show the menu until after that, otherwise the
         // visible selection will update after the menu dismisses and look weird.
         setTimeout(function() {
-          menu.popup({window: electron.remote.getCurrentWindow()});
+          menu.popup({ window: electron.remote.getCurrentWindow() });
         }, 30);
       });
     } else if (document) {
-      document.addEventListener('contextmenu', function(e) {
+      document.addEventListener('contextmenu', function(e: any) {
         // Only show the context menu in text editors.
         if (!e.target.closest(textEditorSelectors)) {
           e.preventDefault();
@@ -148,9 +165,9 @@ export default class Window {
     }
   }
 
-  static openExternalURL(url) {
+  static openExternalURL(url: string) {
     if (electron) {
-      shell.openExternal(url);
+      if (shell) shell.openExternal(url);
       return;
     }
 

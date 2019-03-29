@@ -1,4 +1,6 @@
 // @flow
+import { Trans } from '@lingui/macro';
+
 import * as React from 'react';
 import Debugger from '../../Debugger';
 import BaseEditor from './BaseEditor';
@@ -42,12 +44,14 @@ export default class DebuggerEditor extends BaseEditor {
         <Debugger {...this.props} ref={editor => (this.editor = editor)} />
         <SubscriptionChecker
           ref={subscriptionChecker =>
-            (this._subscriptionChecker = subscriptionChecker)}
+            (this._subscriptionChecker = subscriptionChecker)
+          }
           onChangeSubscription={() => {
             if (this.props.onChangeSubscription)
               this.props.onChangeSubscription();
           }}
-          title="Debugger"
+          id="Debugger"
+          title={<Trans>Debugger</Trans>}
           mode="try"
         />
       </React.Fragment>

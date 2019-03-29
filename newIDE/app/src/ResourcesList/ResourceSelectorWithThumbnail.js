@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import ResourcesLoader from '../ResourcesLoader';
 import ResourceSelector from '../ResourcesList/ResourceSelector';
 import {
@@ -17,9 +17,9 @@ type Props = {|
   resourceExternalEditors: Array<ResourceExternalEditor>,
   resourceKind: ResourceKind,
   resourceName: string,
-  onChange: (string) => void,
-  floatingLabelText?: string,
-  hintText?: string,
+  onChange: string => void,
+  floatingLabelText?: React.Node,
+  hintText?: React.Node,
 |};
 
 const ResourceSelectorWithThumbnail = ({

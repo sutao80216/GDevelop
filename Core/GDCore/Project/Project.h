@@ -125,7 +125,7 @@ class GD_CORE_API Project : public ObjectsContainer {
     adMobAppId = adMobAppId_;
   };
 
-   /**
+  /**
    * \brief Get the project AdMob application ID.
    */
   const gd::String& GetAdMobAppId() const { return adMobAppId; }
@@ -267,6 +267,16 @@ class GD_CORE_API Project : public ObjectsContainer {
    * Set if vertical synchronization is enabled by default.
    */
   void SetVerticalSyncActivatedByDefault(bool enable) { verticalSync = enable; }
+
+  /**
+   * Return the scale mode used by the game (usually "linear" or "nearest").
+   */
+  const gd::String& GetScaleMode() const { return scaleMode; }
+
+  /**
+   * Set the scale mode used by the game (usually "linear" or "nearest").
+   */
+  void SetScaleMode(const gd::String& scaleMode_) { scaleMode = scaleMode_; }
 
   /**
    * Return a reference to the vector containing the names of extensions used by
@@ -522,12 +532,17 @@ class GD_CORE_API Project : public ObjectsContainer {
   /**
    * Get the major version of GDevelop used to save the project.
    */
-  unsigned int GetLastSaveGDMajorVersion() { return GDMajorVersion; };
+  unsigned int GetLastSaveGDMajorVersion() { return gdMajorVersion; };
 
   /**
    * Get the minor version of GDevelop used to save the project.
    */
-  unsigned int GetLastSaveGDMinorVersion() { return GDMinorVersion; };
+  unsigned int GetLastSaveGDMinorVersion() { return gdMinorVersion; };
+  
+  /**
+   * Get the minor version of GDevelop used to save the project.
+   */
+  unsigned int GetLastSaveGDBuildVersion() { return gdBuildVersion; };
 #endif
 
 /** \name External events management
@@ -816,7 +831,7 @@ class GD_CORE_API Project : public ObjectsContainer {
    * resources, sometimes update their filename or any other work or resources.
    *
    * See WholeProjectRefactorer for the same thing for events.
-   * 
+   *
    * \see WholeProjectRefactorer
    * \see ArbitraryResourceWorker
    */
@@ -948,6 +963,7 @@ class GD_CORE_API Project : public ObjectsContainer {
   unsigned int minFPS;  ///< Minimum Frame Per Seconds ( slow down game if FPS
                         ///< are below this number )
   bool verticalSync;    ///< If true, must activate vertical synchronization.
+  gd::String scaleMode;
   gd::String
       sizeOnStartupMode;  ///< How to adapt the game size to the screen. Can be
                           ///< "adaptWidth", "adaptHeight" or empty
@@ -976,7 +992,7 @@ class GD_CORE_API Project : public ObjectsContainer {
   gd::String packageName;   ///< Game package name
   gd::String orientation;   ///< Lock game orientation (on mobile devices).
                             ///< "default", "landscape" or "portrait".
-  gd::String adMobAppId;   ///< AdMob application ID.
+  gd::String adMobAppId;    ///< AdMob application ID.
   bool
       folderProject;  ///< True if folder project, false if single file project.
   gd::String gameFile;                    ///< File of the game
@@ -987,9 +1003,11 @@ class GD_CORE_API Project : public ObjectsContainer {
   gd::LoadingScreen loadingScreen;
   std::vector<std::unique_ptr<gd::ExternalEvents> >
       externalEvents;                   ///< List of all externals events
-  mutable unsigned int GDMajorVersion;  ///< The GD major version used the last
+  mutable unsigned int gdMajorVersion;  ///< The GD major version used the last
                                         ///< time the project was saved.
-  mutable unsigned int GDMinorVersion;  ///< The GD minor version used the last
+  mutable unsigned int gdMinorVersion;  ///< The GD minor version used the last
+                                        ///< time the project was saved.
+  mutable unsigned int gdBuildVersion;  ///< The GD build version used the last
                                         ///< time the project was saved.
   mutable bool dirty;  ///< True to flag the project as being modified.
 #endif

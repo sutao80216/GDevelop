@@ -1,4 +1,6 @@
 // @flow
+import { Trans } from '@lingui/macro';
+
 import * as React from 'react';
 import { Step, Stepper, StepLabel, StepContent } from 'material-ui/Stepper';
 import CircularProgress from 'material-ui/CircularProgress';
@@ -24,7 +26,11 @@ export default ({
     activeStep={
       exportStep === 'export'
         ? 0
-        : exportStep === 'compress' ? 1 : exportStep === 'done' ? 2 : undefined
+        : exportStep === 'compress'
+        ? 1
+        : exportStep === 'done'
+        ? 2
+        : undefined
     }
     orientation="vertical"
   >
@@ -34,7 +40,9 @@ export default ({
         <Line alignItems="center">
           <CircularProgress size={20} />
           <Spacer />
-          <p>Export in progress...</p>
+          <p>
+            <Trans>Export in progress...</Trans>
+          </p>
         </Line>
       </StepContent>
     </Step>
@@ -43,14 +51,18 @@ export default ({
       <StepContent>
         {errored ? (
           <p>
-            Can't compress the game. Please check that you have rights to write
-            on this computer.
+            <Trans>
+              Can't compress the game. Please check that you have rights to
+              write on this computer.
+            </Trans>
           </p>
         ) : (
           <Line alignItems="center">
             <CircularProgress size={20} />
             <Spacer />
-            <p>Compressing...</p>
+            <p>
+              <Trans>Compressing...</Trans>
+            </p>
           </Line>
         )}
       </StepContent>
@@ -58,17 +70,20 @@ export default ({
     <Step>
       <StepLabel>Export finished</StepLabel>
       <StepContent>
-        <Line expand>You can now create a game on Facebook Instant Games, if not already done, and upload the archive generated.</Line>
         <Line expand>
-            <FlatButton
-              label="Open folder"
-              onClick={onOpenExportFolder}
-            />
-            <RaisedButton
-              label="Learn more about Instant Games publication"
-              primary
-              onClick={onOpenLearnMore}
-            />
+          You can now create a game on Facebook Instant Games, if not already
+          done, and upload the archive generated.
+        </Line>
+        <Line expand>
+          <FlatButton
+            label={<Trans>Open folder</Trans>}
+            onClick={onOpenExportFolder}
+          />
+          <RaisedButton
+            label={<Trans>Learn more about Instant Games publication</Trans>}
+            primary
+            onClick={onOpenLearnMore}
+          />
         </Line>
       </StepContent>
     </Step>

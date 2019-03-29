@@ -1,3 +1,4 @@
+import { Trans } from '@lingui/macro';
 import React, { Component } from 'react';
 import { sendNewGameCreated } from '../Utils/Analytics/EventSender';
 import { Column, Line } from '../UI/Grid';
@@ -16,6 +17,7 @@ const exampleNames = [
   'basic-ai-with-pathfinding',
   'basic-artificial-intelligence',
   'basic-topdown-car-driving',
+  'betabox-basics-learning-experience',
   'bomb-the-crate',
   'bouncing-ball-and-rope',
   'breakout',
@@ -35,11 +37,14 @@ const exampleNames = [
   'device-orientation-ballgame',
   'device-orientation-compass',
   'device-vibration',
+  'downhill-bike-physics-demo',
   'drag-camera-with-mouse',
   'drop-collect-items-from-storage',
+  'endless-up-runner',
   'exit-app',
   'facebook-instant-game',
   'find-diagonals',
+  'geodash',
   'health-bar',
   'infinite-scrolling-background',
   'inventory-system',
@@ -69,25 +74,31 @@ const exampleNames = [
   'particles-various-effects',
   'pathfinding-basics',
   'pathfinding',
+  'physics-joints-demo',
+  'physics-joints-settings-demo',
   'physics',
   'pin-object-to-another-multiple-parents',
   'pin-object-to-another',
+  'pixel-perfect-platform-game',
   'plane-and-clouds',
   'platformer-double-jump',
   'platformer',
   'play-music-on-mobile',
   'play-stop-sprite-animation',
   'racing-game',
+  'ragdoll',
   'rain',
   'random-color-picker',
   'rotate-toward-mouse',
   'rotate-toward-position',
   'rotate-with-keypress',
   'save-load',
+  'screen-shake',
   'shoot-bullet-in-parabola',
   'shoot-bullets',
   'shooting-bullets-explanation',
   'snap-object-to-grid',
+  'space-invaders',
   'space-shooter-with-functions',
   'space-shooter',
   'splash-screen',
@@ -106,7 +117,9 @@ export default class BrowserExamples extends Component {
     return (
       <Column noMargin>
         <Column>
-          <p>Choose or search for an example to open:</p>
+          <p>
+            <Trans>Choose or search for an example to open:</Trans>
+          </p>
         </Column>
         <Line>
           <ExamplesList

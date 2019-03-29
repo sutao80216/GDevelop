@@ -109,7 +109,7 @@ bool Exporter::ExportWholePixiProject(
 
     wxProgressDialog* progressDialogPtr = NULL;
 #if !defined(GD_NO_WX_GUI)
-    wxProgressDialog progressDialog(_("Export in progress ( 1/2 )"),
+    wxProgressDialog progressDialog(_("Export in progress (1/2)"),
                                     _("Exporting the project..."));
     progressDialogPtr = &progressDialog;
 #endif
@@ -195,6 +195,11 @@ bool Exporter::ExportWholePixiProject(
     if (!exportProject(exportDir + "/app")) return false;
 
     if (!helper.ExportElectronFiles(exportedProject, exportDir)) return false;
+  } else if (exportOptions["exportForFacebookInstantGames"]) {
+    if (!exportProject(exportDir)) return false;
+
+    if (!helper.ExportFacebookInstantGamesFiles(exportedProject, exportDir))
+      return false;
   } else {
     if (!exportProject(exportDir)) return false;
   }
@@ -224,7 +229,7 @@ bool Exporter::ExportWholeCocos2dProject(gd::Project& project,
 
   wxProgressDialog* progressDialogPtr = NULL;
 #if !defined(GD_NO_WX_GUI)
-  wxProgressDialog progressDialog(_("Export in progress ( 1/2 )"),
+  wxProgressDialog progressDialog(_("Export in progress (1/2)"),
                                   _("Exporting the project..."));
   progressDialogPtr = &progressDialog;
 #endif

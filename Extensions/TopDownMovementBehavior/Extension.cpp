@@ -121,7 +121,7 @@ void DeclareTopDownMovementBehaviorExtension(gd::PlatformExtension& extension) {
                    _("Is moving"),
                    _("Check if the object is moving."),
                    _("_PARAM0_ is moving"),
-                   _(""),
+                   "",
                    "CppPlatform/Extensions/topdownmovementicon24.png",
                    "CppPlatform/Extensions/topdownmovementicon16.png")
       .AddParameter("object", _("Object"))
@@ -309,8 +309,59 @@ void DeclareTopDownMovementBehaviorExtension(gd::PlatformExtension& extension) {
       .SetManipulatedType("number")
       .SetIncludeFile("TopDownMovementBehavior/TopDownMovementBehavior.h");
 
+  aut.AddCondition(
+         "Angle",
+         _("Angle of movement"),
+         _("Compare the angle of the top-down movemement of the object."),
+         _("Angle of movemement of _PARAM0_ is _PARAM2__PARAM3_"),
+         _("Movement"),
+         "CppPlatform/Extensions/topdownmovementicon24.png",
+         "CppPlatform/Extensions/topdownmovementicon16.png")
+      .AddParameter("object", _("Object"))
+      .AddParameter("behavior", _("Behavior"), "TopDownMovementBehavior")
+      .AddParameter("relationalOperator", _("Sign of the test"))
+      .AddParameter("expression", _("Value"))
+      .MarkAsAdvanced()
+      .SetFunctionName("GetAngle")
+      .SetManipulatedType("number")
+      .SetIncludeFile("TopDownMovementBehavior/TopDownMovementBehavior.h");
+
+  aut.AddCondition(
+         "XVelocity",
+         _("Speed on X axis"),
+         _("Compare the velocity of the top-down movemement of the object on the X axis."),
+         _("Speed of movemement on X axis of _PARAM0_ is _PARAM2__PARAM3_"),
+         _("Movement"),
+         "CppPlatform/Extensions/topdownmovementicon24.png",
+         "CppPlatform/Extensions/topdownmovementicon16.png")
+      .AddParameter("object", _("Object"))
+      .AddParameter("behavior", _("Behavior"), "TopDownMovementBehavior")
+      .AddParameter("relationalOperator", _("Sign of the test"))
+      .AddParameter("expression", _("Value"))
+      .MarkAsAdvanced()
+      .SetFunctionName("GetXVelocity")
+      .SetManipulatedType("number")
+      .SetIncludeFile("TopDownMovementBehavior/TopDownMovementBehavior.h");
+
+  aut.AddCondition(
+         "YVelocity",
+         _("Speed on Y axis"),
+         _("Compare the velocity of the top-down movemement of the object on the Y axis."),
+         _("Speed of movemement on Y axis of _PARAM0_ is _PARAM2__PARAM3_"),
+         _("Movement"),
+         "CppPlatform/Extensions/topdownmovementicon24.png",
+         "CppPlatform/Extensions/topdownmovementicon16.png")
+      .AddParameter("object", _("Object"))
+      .AddParameter("behavior", _("Behavior"), "TopDownMovementBehavior")
+      .AddParameter("relationalOperator", _("Sign of the test"))
+      .AddParameter("expression", _("Value"))
+      .MarkAsAdvanced()
+      .SetFunctionName("GetYVelocity")
+      .SetManipulatedType("number")
+      .SetIncludeFile("TopDownMovementBehavior/TopDownMovementBehavior.h");
+
   aut.AddAction("AllowDiagonals",
-                _("Diagonals moves"),
+                _("Diagonal movement"),
                 _("Allow or restrict diagonal movemment"),
                 _("Allow diagonal moves for _PARAM0_: _PARAM2_"),
                 _("Movement"),
@@ -323,7 +374,7 @@ void DeclareTopDownMovementBehaviorExtension(gd::PlatformExtension& extension) {
       .SetIncludeFile("TopDownMovementBehavior/TopDownMovementBehavior.h");
 
   aut.AddCondition("DiagonalsAllowed",
-                   _("Diagonals moves"),
+                   _("Diagonal movement"),
                    _("Return true if the object is allowed to move diagonally"),
                    _("Allow diagonal moves for _PARAM0_"),
                    _("Movement"),
@@ -421,6 +472,36 @@ void DeclareTopDownMovementBehaviorExtension(gd::PlatformExtension& extension) {
       .AddParameter("object", _("Object"))
       .AddParameter("behavior", _("Behavior"), "TopDownMovementBehavior")
       .SetFunctionName("GetAngleOffset")
+      .SetIncludeFile("TopDownMovementBehavior/TopDownMovementBehavior.h");
+
+  aut.AddExpression("Angle",
+                    _("Angle of the movement"),
+                    _("Angle, in degrees, of the movement"),
+                    _("Movement"),
+                    "CppPlatform/Extensions/topdownmovementicon16.png")
+      .AddParameter("object", _("Object"))
+      .AddParameter("behavior", _("Behavior"), "TopDownMovementBehavior")
+      .SetFunctionName("GetAngle")
+      .SetIncludeFile("TopDownMovementBehavior/TopDownMovementBehavior.h");
+
+  aut.AddExpression("XVelocity",
+                    _("Speed on the X axis"),
+                    _("Speed on the X axis of the movement"),
+                    _("Movement"),
+                    "CppPlatform/Extensions/topdownmovementicon16.png")
+      .AddParameter("object", _("Object"))
+      .AddParameter("behavior", _("Behavior"), "TopDownMovementBehavior")
+      .SetFunctionName("GetXVelocity")
+      .SetIncludeFile("TopDownMovementBehavior/TopDownMovementBehavior.h");
+
+  aut.AddExpression("YVelocity",
+                    _("Speed on the Y axis"),
+                    _("Speed on the Y axis of the movement"),
+                    _("Movement"),
+                    "CppPlatform/Extensions/topdownmovementicon16.png")
+      .AddParameter("object", _("Object"))
+      .AddParameter("behavior", _("Behavior"), "TopDownMovementBehavior")
+      .SetFunctionName("GetYVelocity")
       .SetIncludeFile("TopDownMovementBehavior/TopDownMovementBehavior.h");
 #endif
 }

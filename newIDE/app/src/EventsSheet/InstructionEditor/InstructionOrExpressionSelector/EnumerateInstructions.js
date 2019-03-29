@@ -7,7 +7,7 @@ const GROUP_DELIMITER = '/';
 const enumerateExtensionInstructions = (
   groupPrefix: string,
   extensionInstructions
-) => {
+): Array<InstructionOrExpressionInformation> => {
   //Get the map containing the metadata of the instructions provided by the extension...
   var instructionsTypes = extensionInstructions.keys();
   const allInstructions = [];
@@ -19,10 +19,13 @@ const enumerateExtensionInstructions = (
 
     const displayedName = instrMetadata.getFullName();
     const groupName = instrMetadata.getGroup();
+    const iconFilename = instrMetadata.getIconFilename();
     const fullGroupName = groupPrefix + groupName;
 
     allInstructions.push({
       type: instructionsTypes.get(j),
+      metadata: instrMetadata,
+      iconFilename,
       displayedName,
       fullGroupName,
     });
@@ -49,7 +52,7 @@ export const enumerateInstructions = (
       prefix =
         extension.getName() === 'BuiltinObject'
           ? 'Common ' +
-            (isCondition ? 'conditions' : 'action') +
+            (isCondition ? 'conditions' : 'actions') +
             ' for all objects'
           : extension.getFullName();
       prefix += GROUP_DELIMITER;

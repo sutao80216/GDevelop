@@ -1,8 +1,13 @@
 // @flow
+import { Trans } from '@lingui/macro';
+
 import * as React from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import SceneEditor from '../../SceneEditor';
-import { serializeToJSObject } from '../../Utils/Serializer';
+import {
+  serializeToJSObject,
+  unserializeFromJSObject,
+} from '../../Utils/Serializer';
 import PlaceholderMessage from '../../UI/PlaceholderMessage';
 import BaseEditor from './BaseEditor';
 import LayoutChooserDialog from './LayoutChooserDialog';
@@ -88,6 +93,18 @@ export default class ExternalLayoutEditor extends BaseEditor {
     });
   };
 
+  saveUiSettings = () => {
+    const layout = this.getExternalLayout();
+    const editor = this.editor;
+
+    if (editor && layout) {
+      unserializeFromJSObject(
+        layout.getAssociatedSettings(),
+        editor.getUiSettings()
+      );
+    }
+  };
+
   render() {
     const { project, externalLayoutName, isActive } = this.props;
     const externalLayout = this.getExternalLayout();
@@ -111,7 +128,8 @@ export default class ExternalLayoutEditor extends BaseEditor {
               externalLayout.getAssociatedSettings()
             )}
             onPreview={options =>
-              this.props.onPreview(project, layout, externalLayout, options)}
+              this.props.onPreview(project, layout, externalLayout, options)
+            }
             onOpenDebugger={this.props.onOpenDebugger}
             onOpenMoreSettings={this.openLayoutChooser}
             isActive={isActive}
@@ -122,14 +140,14 @@ export default class ExternalLayoutEditor extends BaseEditor {
             To edit the external layout, choose the scene in which it will be
             included:
             <RaisedButton
-              label="Choose the scene"
+              label={<Trans>Choose the scene</Trans>}
               primary
               onClick={this.openLayoutChooser}
             />
           </PlaceholderMessage>
         )}
         <LayoutChooserDialog
-          title="Choose the associated scene"
+          title={<Trans>Choose the associated scene</Trans>}
           open={this.state.layoutChooserOpen}
           project={project}
           onChoose={this.setAssociatedLayout}

@@ -1,4 +1,6 @@
 // @flow
+import { Trans } from '@lingui/macro';
+
 import React, { Component } from 'react';
 import { AutoSizer, List } from 'react-virtualized';
 import { ListItem } from 'material-ui/List';
@@ -71,7 +73,7 @@ class ObjectsList extends Component<*, *> {
                 style={style}
                 disabled
                 onClick={this.props.onAddNewObject}
-                primaryText="Click to add an object"
+                primaryText={<Trans>Click to add an object</Trans>}
               />
             );
           }
@@ -97,16 +99,19 @@ class ObjectsList extends Component<*, *> {
                   : undefined
               }
               onEditVariables={() =>
-                this.props.onEditVariables(objectWithContext.object)}
+                this.props.onEditVariables(objectWithContext.object)
+              }
               onEditName={() => this.props.onEditName(objectWithContext)}
               onDelete={() => this.props.onDelete(objectWithContext)}
               onCopyObject={() => this.props.onCopyObject(objectWithContext)}
               onCutObject={() => this.props.onCutObject(objectWithContext)}
               onDuplicateObject={() =>
-                this.props.onDuplicateObject(objectWithContext)}
+                this.props.onDuplicateObject(objectWithContext)
+              }
               onPasteObject={() => this.props.onPasteObject(objectWithContext)}
               onRename={newName =>
-                this.props.onRename(objectWithContext, newName)}
+                this.props.onRename(objectWithContext, newName)
+              }
               onSetAsGlobalObject={
                 objectWithContext.global
                   ? undefined
@@ -457,7 +462,8 @@ export default class ObjectsListContainer extends React.Component<
                 onSetAsGlobalObject={this._setAsGlobalObject}
                 onPasteObject={this._pasteAndRename}
                 onAddNewObject={() =>
-                  this.setState({ newObjectDialogOpen: true })}
+                  this.setState({ newObjectDialogOpen: true })
+                }
                 onEditName={this._editName}
                 onEditVariables={this._editVariables}
                 onDelete={this._deleteObject}
@@ -479,7 +485,8 @@ export default class ObjectsListContainer extends React.Component<
           onChange={text =>
             this.setState({
               searchText: text,
-            })}
+            })
+          }
         />
         {this.state.newObjectDialogOpen && (
           <NewObjectDialog
@@ -498,6 +505,7 @@ export default class ObjectsListContainer extends React.Component<
             }
             onCancel={() => this._editVariables(null)}
             onApply={() => this._editVariables(null)}
+            title="Object Variables"
             emptyExplanationMessage="When you add variables to an object, any instance of the object put on the scene or created during the game will have these variables attached to it."
             emptyExplanationSecondMessage="For example, you can have a variable called Life representing the health of the object."
           />

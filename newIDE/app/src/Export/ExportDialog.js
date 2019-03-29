@@ -1,3 +1,4 @@
+import { Trans } from '@lingui/macro';
 import React, { Component } from 'react';
 import Dialog from '../UI/Dialog';
 import HelpButton from '../UI/HelpButton';
@@ -73,19 +74,19 @@ export default class ExportDialog extends Component {
 
     return (
       <Dialog
-        title="Export project to a standalone game"
+        title={<Trans>Export project to a standalone game</Trans>}
         onRequestClose={onClose}
         actions={[
           chosenExporterKey && (
             <FlatButton
-              label="Back"
+              label={<Trans>Back</Trans>}
               key="back"
               primary={false}
               onClick={() => this.chooseExporter('')}
             />
           ),
           <FlatButton
-            label="Close"
+            label={<Trans>Close</Trans>}
             key="close"
             primary={false}
             onClick={onClose}
@@ -98,7 +99,7 @@ export default class ExportDialog extends Component {
           />,
           <FlatButton
             key="builds"
-            label="See all my builds"
+            label={<Trans>See all my builds</Trans>}
             onClick={() => this._openBuildsDialog(true)}
           />,
         ]}
@@ -133,23 +134,23 @@ export default class ExportDialog extends Component {
                   )}
             </List>
             <Line justifyContent="center" alignItems="center">
-            {!showExperimental ? (
-              <FlatButton
-                key="toggle-experimental"
-                icon={<Visibility />}
-                primary={false}
-                onClick={() => this._showExperimental(true)}
-                label="Show experimental exports"
-              />
-            ) : (
-              <FlatButton
-                key="toggle-experimental"
-                icon={<VisibilityOff />}
-                primary={false}
-                onClick={() => this._showExperimental(false)}
-                label="Hide experimental exports"
-              />
-            )}
+              {!showExperimental ? (
+                <FlatButton
+                  key="toggle-experimental"
+                  icon={<Visibility />}
+                  primary={false}
+                  onClick={() => this._showExperimental(true)}
+                  label={<Trans>Show experimental exports</Trans>}
+                />
+              ) : (
+                <FlatButton
+                  key="toggle-experimental"
+                  icon={<VisibilityOff />}
+                  primary={false}
+                  onClick={() => this._showExperimental(false)}
+                  label={<Trans>Hide experimental exports</Trans>}
+                />
+              )}
             </Line>
           </React.Fragment>
         )}

@@ -1,4 +1,6 @@
 // @flow
+import { Trans } from '@lingui/macro';
+
 import * as React from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Column, Line } from '../UI/Grid';
@@ -157,7 +159,8 @@ export default class LocalExamples extends React.Component<Props, State> {
                       secondaryText={exampleInformation.description}
                       secondaryTextLines={2}
                       onClick={() =>
-                        this.props.onCreateFromExample(exampleName)}
+                        this.props.onCreateFromExample(exampleName)
+                      }
                     />
                   );
                 })}
@@ -165,10 +168,12 @@ export default class LocalExamples extends React.Component<Props, State> {
             </List>
             {!!electron && (
               <Column expand>
-                <p>Want to contribute to the examples?</p>
+                <p>
+                  <Trans>Want to contribute to the examples?</Trans>
+                </p>
                 <Line alignItems="center" justifyContent="center">
                   <RaisedButton
-                    label="Submit your example"
+                    label={<Trans>Submit your example</Trans>}
                     onClick={this._submitExample}
                   />
                 </Line>

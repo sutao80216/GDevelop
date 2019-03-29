@@ -1,4 +1,6 @@
 // @flow
+import { Trans } from '@lingui/macro';
+
 import * as React from 'react';
 import ReactErrorBoundary from 'react-error-boundary';
 import BugReport from 'material-ui/svg-icons/action/bug-report';
@@ -35,16 +37,19 @@ export const ErrorFallbackComponent = ({
     </p>
     <Divider />
     <p>
-        Something wrong happened :(<br />
-        Please <b>backup your game file</b> and save your game to ensure that you don't lose anything.
+      Something wrong happened :(
+      <br />
+      Please <b>backup your game file</b> and save your game to ensure that you
+      don't lose anything.
     </p>
     <p>
-      The error was automatically reported.<br />
-      To make sure it's fixed, you may report it on GitHub, the platform
-      where GDevelop is developed:
+      The error was automatically reported.
+      <br />
+      To make sure it's fixed, you may report it on GitHub, the platform where
+      GDevelop is developed:
     </p>
     <RaisedButton
-      label="Report the issue on GitHub"
+      label={<Trans>Report the issue on GitHub</Trans>}
       onClick={() => {
         const body = `
 => Please write here a short description of when the error occured and how to reproduce it.

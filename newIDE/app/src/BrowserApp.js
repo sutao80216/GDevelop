@@ -17,8 +17,11 @@ import browserResourceSources from './ResourcesList/BrowserResourceSources';
 import browserResourceExternalEditors from './ResourcesList/BrowserResourceExternalEditors';
 import BrowserS3PreviewLauncher from './Export/BrowserExporters/BrowserS3PreviewLauncher';
 import { getBrowserExporters } from './Export/BrowserExporters';
-import BrowserJsExtensionsLoader from './JsExtensionsLoader/BrowserJsExtensionsLoader';
+import makeExtensionsLoader from './JsExtensionsLoader/BrowserJsExtensionsLoader';
+import ObjectsEditorService from './ObjectEditor/ObjectsEditorService';
+import ObjectsRenderingService from './ObjectsRendering/ObjectsRenderingService';
 import { makeBrowserS3EventsFunctionWriter } from './EventsFunctionsExtensionsLoader/BrowserS3EventsFunctionWriter';
+import Providers from './MainFrame/Providers';
 
 export const create = (authentification: Authentification) => {
   Window.setUpContextMenu();
@@ -27,25 +30,37 @@ export const create = (authentification: Authentification) => {
   const appArguments = Window.getArguments();
 
   app = (
-    <MainFrame
-      previewLauncher={<BrowserS3PreviewLauncher />}
-      exportDialog={<ExportDialog exporters={getBrowserExporters()} />}
-      createDialog={
-        <CreateProjectDialog
-          examplesComponent={BrowserExamples}
-          startersComponent={BrowserStarters}
-        />
-      }
-      introDialog={<BrowserIntroDialog />}
-      saveDialog={<BrowserSaveDialog />}
-      onReadFromPathOrURL={BrowserProjectOpener.readInternalFile}
-      resourceSources={browserResourceSources}
-      resourceExternalEditors={browserResourceExternalEditors}
+    <Providers
       authentification={authentification}
-      extensionsLoader={new BrowserJsExtensionsLoader()}
-      initialPathsOrURLsToOpen={appArguments['_']}
-      eventsFunctionWriter={makeBrowserS3EventsFunctionWriter()}
-    />
+      disableCheckForUpdates={!!appArguments['disable-update-check']}
+    >
+      {({ i18n }) => (
+        <MainFrame
+          i18n={i18n}
+          previewLauncher={<BrowserS3PreviewLauncher />}
+          exportDialog={<ExportDialog exporters={getBrowserExporters()} />}
+          createDialog={
+            <CreateProjectDialog
+              examplesComponent={BrowserExamples}
+              startersComponent={BrowserStarters}
+            />
+          }
+          introDialog={<BrowserIntroDialog />}
+          saveDialog={<BrowserSaveDialog />}
+          onReadFromPathOrURL={BrowserProjectOpener.readInternalFile}
+          resourceSources={browserResourceSources}
+          resourceExternalEditors={browserResourceExternalEditors}
+          authentification={authentification}
+          extensionsLoader={makeExtensionsLoader({
+            objectsEditorService: ObjectsEditorService,
+            objectsRenderingService: ObjectsRenderingService,
+            filterExamples: !Window.isDev(),
+          })}
+          initialPathsOrURLsToOpen={appArguments['_']}
+          eventsFunctionWriter={makeBrowserS3EventsFunctionWriter()}
+        />
+      )}
+    </Providers>
   );
 
   return app;

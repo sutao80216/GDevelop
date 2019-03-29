@@ -1,4 +1,6 @@
 // @flow
+import OpenInNew from 'material-ui/svg-icons/action/open-in-new';
+
 import React, { Component } from 'react';
 import AutoComplete from 'material-ui/AutoComplete';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -105,16 +107,15 @@ export default class VariableField extends Component<Props, State> {
           openOnFocus={!this.props.isInline}
           ref={field => (this._field = field)}
         />
-        {this.props.onOpenDialog &&
-          !this.props.isInline && (
-            <RaisedButton
-              label="..."
-              disabled={!this.props.variablesContainer}
-              primary
-              style={styles.moreButton}
-              onClick={this.props.onOpenDialog}
-            />
-          )}
+        {this.props.onOpenDialog && !this.props.isInline && (
+          <RaisedButton
+            icon={<OpenInNew />}
+            disabled={!this.props.variablesContainer}
+            primary
+            style={styles.moreButton}
+            onClick={this.props.onOpenDialog}
+          />
+        )}
       </div>
     );
   }

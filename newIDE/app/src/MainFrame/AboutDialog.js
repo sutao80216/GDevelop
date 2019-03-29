@@ -1,4 +1,6 @@
 // @flow
+import { Trans } from '@lingui/macro';
+
 import React, { PureComponent } from 'react';
 import { List, ListItem } from 'material-ui/List';
 import Dialog from '../UI/Dialog';
@@ -6,7 +8,6 @@ import FlatButton from 'material-ui/FlatButton';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import { Column, Line } from '../UI/Grid';
 import Window from '../Utils/Window';
-import optionalRequire from '../Utils/OptionalRequire';
 import IconButton from 'material-ui/IconButton';
 import OpenInNew from 'material-ui/svg-icons/action/open-in-new';
 import PreferencesContext from './Preferences/PreferencesContext';
@@ -16,9 +17,8 @@ import {
   canDownloadUpdate,
   type UpdateStatus,
 } from './UpdaterTools';
-const electron = optionalRequire('electron');
-const app = electron ? electron.remote.app : null;
-const gd = global.gd;
+import Changelog from './Changelog';
+import { getIDEVersion, getGDCoreVersion } from '../Version';
 
 type Props = {
   open: boolean,
@@ -68,8 +68,16 @@ const contributors = [
   },
 
   // Community members:
-  { name: 'ddabrahim', description: 'Lots of examples bundled with GDevelop', link: 'https://gametemplates.itch.io/', },
-  { name: 'Gametemplates', description: 'Examples bundled with GDevelop', link: 'https://gametemplates.itch.io/', },
+  {
+    name: 'ddabrahim',
+    description: 'Lots of examples bundled with GDevelop',
+    link: 'https://gametemplates.itch.io/',
+  },
+  {
+    name: 'Gametemplates',
+    description: 'Examples bundled with GDevelop',
+    link: 'https://gametemplates.itch.io/',
+  },
   { name: 'Mats', description: 'Tutorials, Examples' },
   { name: 'erdo', description: 'Tutorials, Examples' },
   { name: 'Jubileuksen3', description: 'Tutorials, Examples' },
@@ -104,15 +112,6 @@ const contributors = [
 ];
 
 export default class AboutDialog extends PureComponent<Props, *> {
-  gdVersionString = '';
-  appVersionString = '';
-
-  constructor() {
-    super();
-    this.gdVersionString = gd ? gd.VersionWrapper.fullString() : 'Unknown';
-    this.appVersionString = app ? app.getVersion() : '5';
-  }
-
   _openContributePage = () => {
     Window.openExternalURL('https://gdevelop-app.com/contribute/');
   };
@@ -134,11 +133,15 @@ export default class AboutDialog extends PureComponent<Props, *> {
       <Dialog
         actions={[
           <FlatButton
-            label="GDevelop Website"
+            label={<Trans>GDevelop Website</Trans>}
             primary={false}
             onClick={() => Window.openExternalURL('http://gdevelop-app.com')}
           />,
-          <FlatButton label="Close" primary={false} onClick={onClose} />,
+          <FlatButton
+            label={<Trans>Close</Trans>}
+            primary={false}
+            onClick={onClose}
+          />,
         ]}
         onRequestClose={onClose}
         open={open}
@@ -158,11 +161,13 @@ export default class AboutDialog extends PureComponent<Props, *> {
                 height="283"
               />
               <Tabs onChange={() => this.forceUpdate()}>
-                <Tab label="About GDevelop" value="about">
+                <Tab label={<Trans>About GDevelop</Trans>} value="about">
                   <Column>
                     <Line>
-                      GDevelop {this.appVersionString} based on GDevelop.js{' '}
-                      {this.gdVersionString}
+                      <Trans>
+                        GDevelop {getIDEVersion()} based on GDevelop.js{' '}
+                        {getGDCoreVersion()}
+                      </Trans>
                     </Line>
                     <Line>{updateStatusString}</Line>
                     <Line justifyContent="center">
@@ -170,18 +175,28 @@ export default class AboutDialog extends PureComponent<Props, *> {
                         <FlatButton
                           label={updateButtonLabel}
                           onClick={() =>
-                            checkUpdates(
-                              canDownloadUpdate(updateStatus.status)
-                            )}
+                            checkUpdates(canDownloadUpdate(updateStatus.status))
+                          }
                         />
                       )}
                     </Line>
                   </Column>
                 </Tab>
-                <Tab label="Contributors" value="contributors">
+                <Tab label={<Trans>What's new?</Trans>} value="changelog">
                   <Column>
-                    <p>GDevelop was created by Florian "4ian" Rival.</p>
-                    <p>Contributors, in no particular order:</p>
+                    <Changelog />
+                  </Column>
+                </Tab>
+                <Tab label={<Trans>Contributors</Trans>} value="contributors">
+                  <Column>
+                    <p>
+                      <Trans>
+                        GDevelop was created by Florian "4ian" Rival.
+                      </Trans>
+                    </p>
+                    <p>
+                      <Trans>Contributors, in no particular order:</Trans>
+                    </p>
                   </Column>
                   <List>
                     {contributors.map(contributor => (
@@ -196,7 +211,8 @@ export default class AboutDialog extends PureComponent<Props, *> {
                           contributor.link ? (
                             <IconButton
                               onClick={() =>
-                                this._openLink(contributor.link || '')}
+                                this._openLink(contributor.link || '')
+                              }
                             >
                               <OpenInNew />
                             </IconButton>
@@ -207,13 +223,15 @@ export default class AboutDialog extends PureComponent<Props, *> {
                   </List>
                   <Column expand>
                     <p>
-                      Thanks to all users of GDevelop! There must be missing
-                      tons of people, please send your name if you've
-                      contributed and you're not listed.
+                      <Trans>
+                        Thanks to all users of GDevelop! There must be missing
+                        tons of people, please send your name if you've
+                        contributed and you're not listed.
+                      </Trans>
                     </p>
                     <Line alignItems="center" justifyContent="center">
                       <FlatButton
-                        label="Contribute to GDevelop"
+                        label={<Trans>Contribute to GDevelop</Trans>}
                         onClick={this._openContributePage}
                       />
                     </Line>

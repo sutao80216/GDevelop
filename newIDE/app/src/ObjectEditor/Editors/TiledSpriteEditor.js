@@ -1,4 +1,6 @@
 // @flow
+import { Trans } from '@lingui/macro';
+
 import * as React from 'react';
 import SemiControlledTextField from '../../UI/SemiControlledTextField';
 import { Line, Column } from '../../UI/Grid';
@@ -34,26 +36,26 @@ export default class TiledSpriteEditor extends React.Component<
               tiledSpriteObject.setTexture(resourceName);
               this.forceUpdate();
             }}
-            floatingLabelText="Select an image"
+            floatingLabelText={<Trans>Select an image</Trans>}
           />
         </Line>
         <Line>
           <SemiControlledTextField
-            floatingLabelText="Default width (in pixels)"
+            floatingLabelText={<Trans>Default width (in pixels)</Trans>}
             fullWidth
             type="number"
             value={tiledSpriteObject.getWidth()}
-            onChange={ value => {
+            onChange={value => {
               tiledSpriteObject.setWidth(parseInt(value, 10));
               this.forceUpdate();
             }}
           />
           <SemiControlledTextField
-            floatingLabelText="Default height (in pixels)"
+            floatingLabelText={<Trans>Default height (in pixels)</Trans>}
             fullWidth
             type="number"
             value={tiledSpriteObject.getHeight()}
-            onChange={ value => {
+            onChange={value => {
               tiledSpriteObject.setHeight(parseInt(value, 10));
               this.forceUpdate();
             }}

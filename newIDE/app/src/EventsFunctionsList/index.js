@@ -1,4 +1,6 @@
 // @flow
+import { Trans } from '@lingui/macro';
+
 import * as React from 'react';
 import { AutoSizer } from 'react-virtualized';
 import SortableVirtualizedItemList from '../UI/SortableVirtualizedItemList';
@@ -173,7 +175,7 @@ export default class EventsFunctionsList extends React.Component<Props, State> {
       <Background>
         <Line justifyContent="center">
           <FlatButton
-            label="Edit extension options"
+            label={<Trans>Edit extension options</Trans>}
             primary
             onClick={() => this.props.onEditOptions()}
           />
@@ -189,13 +191,14 @@ export default class EventsFunctionsList extends React.Component<Props, State> {
                 width={width}
                 height={height}
                 onAddNewItem={this._addNewEventsFunction}
-                addNewItemLabel="Add a new function"
+                addNewItemLabel={<Trans>Add a new function</Trans>}
                 selectedItem={selectedEventsFunction}
                 onItemSelected={onSelectEventsFunction}
                 renamedItem={this.state.renamedEventsFunction}
                 onRename={this._rename}
                 onSortEnd={({ oldIndex, newIndex }) =>
-                  this._move(oldIndex, newIndex)}
+                  this._move(oldIndex, newIndex)
+                }
                 buildMenuTemplate={this._renderEventsFunctionMenuTemplate}
                 helperClass="sortable-helper"
                 distance={20}
@@ -209,7 +212,8 @@ export default class EventsFunctionsList extends React.Component<Props, State> {
           onChange={text =>
             this.setState({
               searchText: text,
-            })}
+            })
+          }
         />
       </Background>
     );

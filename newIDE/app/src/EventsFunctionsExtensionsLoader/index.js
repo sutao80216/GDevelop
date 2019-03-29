@@ -19,7 +19,7 @@ const mangleName = (name: string) => {
 export const loadProjectEventsFunctionsExtensions = (
   project: gdProject,
   eventsFunctionWriter: EventsFunctionWriter
-): Promise<void> => {
+): Promise<Array<void>> => {
   return Promise.all(
     // First pass: generate extensions from the events functions extensions,
     // without writing code for the functions. This is useful as events in functions
@@ -30,7 +30,7 @@ export const loadProjectEventsFunctionsExtensions = (
         project,
         project.getEventsFunctionsExtensionAt(i),
         eventsFunctionWriter,
-        {skipCodeGeneration: true}
+        { skipCodeGeneration: true }
       );
     })
   ).then(() =>
@@ -51,7 +51,7 @@ const loadProjectEventsFunctionsExtension = (
   project: gdProject,
   eventsFunctionsExtension: gdEventsFunctionsExtension,
   eventsFunctionWriter: EventsFunctionWriter,
-  options: {skipCodeGeneration?: boolean} = {}
+  options: { skipCodeGeneration?: boolean } = {}
 ): Promise<void> => {
   return generateEventsFunctionExtension(
     project,
@@ -71,7 +71,7 @@ const generateEventsFunctionExtension = (
   project: gdProject,
   eventsFunctionsExtension: gdEventsFunctionsExtension,
   eventsFunctionWriter: EventsFunctionWriter,
-  {skipCodeGeneration}: {skipCodeGeneration?: boolean} = {}
+  { skipCodeGeneration }: { skipCodeGeneration?: boolean } = {}
 ): Promise<gdEventsFunctionsExtension> => {
   const extension = new gd.PlatformExtension();
 
@@ -105,7 +105,7 @@ const generateEventsFunctionExtension = (
       codeExtraInformation
         .setIncludeFile(eventsFunctionWriter.getIncludeFileFor(functionName))
         .setFunctionName(functionName);
-      
+
       if (!skipCodeGeneration) {
         const includeFiles = new gd.SetString();
         const code = gd.EventsCodeGenerator.generateEventsFunctionCode(
@@ -118,7 +118,7 @@ const generateEventsFunctionExtension = (
           // as extensions generated can be used either for preview or export.
           true
         );
-      
+
         // Add any include file required by the function to the list
         // of include files for this function (so that when used, the "dependencies"
         // are transitively included).
@@ -128,9 +128,9 @@ const generateEventsFunctionExtension = (
           .forEach((includeFile: string) => {
             codeExtraInformation.addIncludeFile(includeFile);
           });
-      
+
         includeFiles.delete();
-      
+
         return eventsFunctionWriter.writeFunctionCode(functionName, code);
       } else {
         // Skip code generation if no events function writer is provided.
@@ -147,12 +147,12 @@ const generateEventsFunctionExtension = (
  */
 export const unloadProjectEventsFunctionsExtensions = (
   project: gdProject
-): Promise<void> => {
+): Promise<Array<void>> => {
   return Promise.all(
     mapFor(0, project.getEventsFunctionsExtensionsCount(), i => {
-      gd.JsPlatform
-        .get()
-        .removeExtension(project.getEventsFunctionsExtensionAt(i).getName());
+      gd.JsPlatform.get().removeExtension(
+        project.getEventsFunctionsExtensionAt(i).getName()
+      );
     })
   );
 };
@@ -249,4 +249,30 @@ const addEventsFunctionParameters = (
   // By convention, latest parameter is always the eventsFunctionContext of the calling function
   // (if any).
   instructionOrExpression.addCodeOnlyParameter('eventsFunctionContext', '');
+};
+
+/**
+ * Given metadata about an instruction or an expression, tells if this was created
+ * from an event function.
+ */
+export const isAnEventFunctionMetadata = (
+  instructionOrExpression: gdInstructionMetadata | gdExpressionMetadata
+) => {
+  const parametersCount = instructionOrExpression.getParametersCount();
+  if (parametersCount <= 0) return false;
+
+  return (
+    instructionOrExpression.getParameter(parametersCount - 1).getType() ===
+    'eventsFunctionContext'
+  );
+};
+
+/**
+ * Get back the name a function from its type
+ */
+export const getFunctionNameFromType = (type: string) => {
+  const parts = type.split('::');
+  if (!parts.length) return '';
+
+  return parts[parts.length - 1];
 };

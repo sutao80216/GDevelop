@@ -1,5 +1,5 @@
 import RenderedInstance from './RenderedInstance';
-import PIXI from 'pixi.js';
+import * as PIXI from 'pixi.js';
 
 /**
  * Objects with an unknown type are rendered with a placeholder rectangle.
@@ -53,7 +53,7 @@ RenderedUnknownInstance.getThumbnail = function(
 RenderedUnknownInstance.prototype.update = function() {
   this._pixiObject.position.x = this._instance.getX();
   this._pixiObject.position.y = this._instance.getY();
-  this._pixiObject.rotation = this._instance.getAngle() * Math.PI / 180.0;
+  this._pixiObject.rotation = (this._instance.getAngle() * Math.PI) / 180.0;
 };
 
 export default RenderedUnknownInstance;

@@ -53,10 +53,7 @@ type EventsContainerProps = {|
   onParameterClick: ParameterContext => void,
 
   onEventClick: (eventContext: EventContext) => void,
-  onEventContextMenu: (
-    x: number,
-    y: number
-  ) => void,
+  onEventContextMenu: (x: number, y: number) => void,
   onOpenExternalEvents: string => void,
   onOpenLayout: string => void,
 |};
@@ -82,7 +79,7 @@ class EventContainer extends Component<EventsContainerProps, {||}> {
     this.forceUpdate();
   };
 
-  _onEventContextMenu = domEvent => {
+  _onEventContextMenu = (domEvent: any) => {
     domEvent.preventDefault();
     this.props.onEventContextMenu(domEvent.clientX, domEvent.clientY);
   };
@@ -134,7 +131,9 @@ const getNodeKey = ({ treeIndex }) => treeIndex;
 
 const ThemableSortableTree = ({ muiTheme, className, ...otherProps }) => (
   <SortableTreeWithoutDndContext
-    className={`${eventsTree} ${muiTheme.eventsSheetRootClassName} ${className}`}
+    className={`${eventsTree} ${
+      muiTheme.eventsSheetRootClassName
+    } ${className}`}
     {...otherProps}
   />
 );
@@ -218,6 +217,13 @@ export default class ThemableEventsTree extends Component<EventsTreeProps, *> {
    */
   onHeightsChanged(cb: ?() => void) {
     this.forceUpdate(() => {
+      // Help the developer updating react-sortable-tree
+      if (this._list && !this._list.wrappedInstance.recomputeRowHeights) {
+        console.error(
+          'recomputeRowHeights not on wrappedInstance, this must be fixed after updating react-virtualized/react-sortable-tree'
+        );
+      }
+
       if (this._list) this._list.wrappedInstance.recomputeRowHeights();
       if (cb) cb();
     });
@@ -229,6 +235,13 @@ export default class ThemableEventsTree extends Component<EventsTreeProps, *> {
    */
   forceEventsUpdate(cb: ?() => void) {
     this.setState(this._eventsToTreeData(this.props.events), () => {
+      // Help the developer updating react-sortable-tree
+      if (this._list && !this._list.wrappedInstance.recomputeRowHeights) {
+        console.error(
+          'recomputeRowHeights not on wrappedInstance, this must be fixed after updating react-virtualized/react-sortable-tree'
+        );
+      }
+
       if (this._list) this._list.wrappedInstance.recomputeRowHeights();
       if (cb) cb();
     });
@@ -260,7 +273,7 @@ export default class ThemableEventsTree extends Component<EventsTreeProps, *> {
     depth: number = 0,
     parentDisabled: boolean = false
   ) => {
-    const treeData = mapFor(0, eventsList.getEventsCount(), i => {
+    const treeData = mapFor<any>(0, eventsList.getEventsCount(), i => {
       const event = eventsList.getEventAt(i);
       flatData.push(event);
 
@@ -363,18 +376,22 @@ export default class ThemableEventsTree extends Component<EventsTreeProps, *> {
         onInstructionClick={this.props.onInstructionClick}
         onInstructionDoubleClick={this.props.onInstructionDoubleClick}
         onParameterClick={this.props.onParameterClick}
-        onEventClick={() => this.props.onEventClick({
-          eventsList: node.eventsList,
-          event: node.event,
-          indexInList: node.indexInList,
-          isCondition: node.isCondition,
-        })}
-        onEventContextMenu={(x, y) => this.props.onEventContextMenu(x, y, {
-          eventsList: node.eventsList,
-          event: node.event,
-          indexInList: node.indexInList,
-          isCondition: node.isCondition,
-        })}
+        onEventClick={() =>
+          this.props.onEventClick({
+            eventsList: node.eventsList,
+            event: node.event,
+            indexInList: node.indexInList,
+            isCondition: node.isCondition,
+          })
+        }
+        onEventContextMenu={(x, y) =>
+          this.props.onEventContextMenu(x, y, {
+            eventsList: node.eventsList,
+            event: node.event,
+            indexInList: node.indexInList,
+            isCondition: node.isCondition,
+          })
+        }
         onInstructionContextMenu={this.props.onInstructionContextMenu}
         onInstructionsListContextMenu={this.props.onInstructionsListContextMenu}
         onOpenExternalEvents={this.props.onOpenExternalEvents}

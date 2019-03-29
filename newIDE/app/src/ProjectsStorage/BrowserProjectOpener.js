@@ -5,6 +5,7 @@ import asteroids from '../fixtures/asteroids/asteroids.json';
 import basicAiWithPathfinding from '../fixtures/basic-ai-with-pathfinding/basic-ai-with-pathfinding.json';
 import basicArtificialIntelligence from '../fixtures/basic-artificial-intelligence/basic-artificial-intelligence.json';
 import basicTopdownCarDriving from '../fixtures/basic-topdown-car-driving/basic-topdown-car-driving.json';
+import betaboxBasicsLearningExperience from '../fixtures/betabox-basics-learning-experience/betabox-basics-learning-experience.json';
 import bombTheCrate from '../fixtures/bomb-the-crate/bomb-the-crate.json';
 import bouncingBallAndRope from '../fixtures/bouncing-ball-and-rope/bouncing-ball-and-rope.json';
 import breakout from '../fixtures/breakout/breakout.json';
@@ -24,11 +25,14 @@ import customMousePointer from '../fixtures/custom-mouse-pointer/custom-mouse-po
 import deviceOrientationBallgame from '../fixtures/device-orientation-ballgame/device-orientation-ballgame.json';
 import deviceOrientationCompass from '../fixtures/device-orientation-compass/device-orientation-compass.json';
 import deviceVibration from '../fixtures/device-vibration/device-vibration.json';
+import downhillBikePhysicsDemo from '../fixtures/downhill-bike-physics-demo/downhill-bike-physics-demo.json';
 import dragCameraWithMouse from '../fixtures/drag-camera-with-mouse/drag-camera-with-mouse.json';
 import dropCollectItemsFromStorage from '../fixtures/drop-collect-items-from-storage/drop-collect-items-from-storage.json';
+import endlessUpRunner from '../fixtures/endless-up-runner/endless-up-runner.json';
 import exitApp from '../fixtures/exit-app/exit-app.json';
 import facebookInstantGame from '../fixtures/facebook-instant-game/facebook-instant-game.json';
 import findDiagonals from '../fixtures/find-diagonals/find-diagonals.json';
+import geodash from '../fixtures/geodash/geodash.json';
 import healthBar from '../fixtures/health-bar/health-bar.json';
 import infiniteScrollingBackground from '../fixtures/infinite-scrolling-background/infinite-scrolling-background.json';
 import inventorySystem from '../fixtures/inventory-system/inventory-system.json';
@@ -59,8 +63,11 @@ import particlesVariousEffects from '../fixtures/particles-various-effects/parti
 import pathfinding from '../fixtures/pathfinding/pathfinding.json';
 import pathfindingBasics from '../fixtures/pathfinding-basics/pathfinding-basics.json';
 import physics from '../fixtures/physics/physics.json';
+import physicsJointsDemo from '../fixtures/physics-joints-demo/physics-joints-demo.json';
+import physicsJointsSettingsDemo from '../fixtures/physics-joints-settings-demo/physics-joints-settings-demo.json';
 import pinObjectToAnother from '../fixtures/pin-object-to-another/pin-object-to-another.json';
 import pinObjectToAnotherMultipleParents from '../fixtures/pin-object-to-another-multiple-parents/pin-object-to-another-multiple-parents.json';
+import pixelPerfectPlatformGame from '../fixtures/pixel-perfect-platform-game/pixel-perfect-platform-game.json';
 import planeAndClouds from '../fixtures/plane-and-clouds/plane-and-clouds.json';
 import platformer from '../fixtures/platformer/platformer.json';
 import platformerDoubleJump from '../fixtures/platformer-double-jump/platformer-double-jump.json';
@@ -68,15 +75,18 @@ import playMusicOnMobile from '../fixtures/play-music-on-mobile/play-music-on-mo
 import playStopSpriteAnimation from '../fixtures/play-stop-sprite-animation/play-stop-sprite-animation.json';
 import racingGame from '../fixtures/racing-game/racing-game.json';
 import rain from '../fixtures/rain/rain.json';
+import ragdoll from '../fixtures/ragdoll/ragdoll.json';
 import randomColorPicker from '../fixtures/random-color-picker/random-color-picker.json';
 import rotateTowardMouse from '../fixtures/rotate-toward-mouse/rotate-toward-mouse.json';
 import rotateTowardPosition from '../fixtures/rotate-toward-position/rotate-toward-position.json';
 import rotateWithKeypress from '../fixtures/rotate-with-keypress/rotate-with-keypress.json';
 import saveLoad from '../fixtures/save-load/save-load.json';
+import screenShake from '../fixtures/screen-shake/screen-shake.json';
 import shootBulletInParabola from '../fixtures/shoot-bullet-in-parabola/shoot-bullet-in-parabola.json';
 import shootBullets from '../fixtures/shoot-bullets/shoot-bullets.json';
 import shootingBulletsExplanation from '../fixtures/shooting-bullets-explanation/shooting-bullets-explanation.json';
 import snapObjectToGrid from '../fixtures/snap-object-to-grid/snap-object-to-grid.json';
+import spaceInvaders from '../fixtures/space-invaders/space-invaders.json';
 import spaceShooter from '../fixtures/space-shooter/space-shooter.json';
 import spaceShooterWithFunctions from '../fixtures/space-shooter-with-functions/space-shooter-with-functions.json';
 import splashScreen from '../fixtures/splash-screen/splash-screen.json';
@@ -105,6 +115,8 @@ export default class BrowserProjectOpener {
       return Promise.resolve(basicArtificialIntelligence);
     } else if (url === 'example://basic-topdown-car-driving') {
       return Promise.resolve(basicTopdownCarDriving);
+    } else if (url === 'example://betabox-basics-learning-experience') {
+      return Promise.resolve(betaboxBasicsLearningExperience);
     } else if (url === 'example://bomb-the-crate') {
       return Promise.resolve(bombTheCrate);
     } else if (url === 'example://bouncing-ball-and-rope') {
@@ -119,6 +131,8 @@ export default class BrowserProjectOpener {
       return Promise.resolve(pinObjectToAnother);
     } else if (url === 'example://pin-object-to-another-multiple-parents') {
       return Promise.resolve(pinObjectToAnotherMultipleParents);
+    } else if (url === 'example://pixel-perfect-platform-game') {
+      return Promise.resolve(pixelPerfectPlatformGame);
     } else if (url === 'example://plane-and-clouds') {
       return Promise.resolve(planeAndClouds);
     } else if (url === 'example://center-object-within-another') {
@@ -141,6 +155,8 @@ export default class BrowserProjectOpener {
       return Promise.resolve(deviceOrientationCompass);
     } else if (url === 'example://device-vibration') {
       return Promise.resolve(deviceVibration);
+    } else if (url === 'example://downhill-bike-physics-demo') {
+      return Promise.resolve(downhillBikePhysicsDemo);
     } else if (url === 'example://create-object-with-mouseclick') {
       return Promise.resolve(createObjectWithMouseclick);
     } else if (url === 'example://custom-font') {
@@ -153,12 +169,16 @@ export default class BrowserProjectOpener {
       return Promise.resolve(dragCameraWithMouse);
     } else if (url === 'example://drop-collect-items-from-storage') {
       return Promise.resolve(dropCollectItemsFromStorage);
+    } else if (url === 'example://endless-up-runner') {
+      return Promise.resolve(endlessUpRunner);
     } else if (url === 'example://exit-app') {
       return Promise.resolve(exitApp);
     } else if (url === 'example://facebook-instant-game') {
       return Promise.resolve(facebookInstantGame);
     } else if (url === 'example://find-diagonals') {
       return Promise.resolve(findDiagonals);
+    } else if (url === 'example://geodash') {
+      return Promise.resolve(geodash);
     } else if (url === 'example://health-bar') {
       return Promise.resolve(healthBar);
     } else if (url === 'example://infinite-scrolling-background') {
@@ -219,6 +239,10 @@ export default class BrowserProjectOpener {
       return Promise.resolve(pathfindingBasics);
     } else if (url === 'example://physics') {
       return Promise.resolve(physics);
+    } else if (url === 'example://physics-joints-demo') {
+      return Promise.resolve(physicsJointsDemo);
+    } else if (url === 'example://physics-joints-settings-demo') {
+      return Promise.resolve(physicsJointsSettingsDemo);
     } else if (url === 'example://platformer') {
       return Promise.resolve(platformer);
     } else if (url === 'example://platformer-double-jump') {
@@ -231,6 +255,8 @@ export default class BrowserProjectOpener {
       return Promise.resolve(racingGame);
     } else if (url === 'example://rain') {
       return Promise.resolve(rain);
+    } else if (url === 'example://ragdoll') {
+      return Promise.resolve(ragdoll);
     } else if (url === 'example://random-color-picker') {
       return Promise.resolve(randomColorPicker);
     } else if (url === 'example://rotate-toward-mouse') {
@@ -241,6 +267,8 @@ export default class BrowserProjectOpener {
       return Promise.resolve(rotateWithKeypress);
     } else if (url === 'example://save-load') {
       return Promise.resolve(saveLoad);
+    } else if (url === 'example://screen-shake') {
+      return Promise.resolve(screenShake);
     } else if (url === 'example://shoot-bullet-in-parabola') {
       return Promise.resolve(shootBulletInParabola);
     } else if (url === 'example://shoot-bullets') {
@@ -249,6 +277,8 @@ export default class BrowserProjectOpener {
       return Promise.resolve(shootingBulletsExplanation);
     } else if (url === 'example://snap-object-to-grid') {
       return Promise.resolve(snapObjectToGrid);
+    } else if (url === 'example://space-invaders') {
+      return Promise.resolve(spaceInvaders);
     } else if (url === 'example://space-shooter') {
       return Promise.resolve(spaceShooter);
     } else if (url === 'example://space-shooter-with-functions') {

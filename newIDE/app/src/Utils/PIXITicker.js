@@ -1,4 +1,4 @@
-import PIXI from 'pixi.js';
+import * as PIXI from 'pixi.js';
 
 // PIXI has a ticker that is used by PIXI InteractionManager, and which
 // frequently check if interaction happened. We may want to disable it
@@ -12,7 +12,7 @@ export const stopPIXITicker = () => {
   if (ticker) ticker.stop();
 };
 
-/** 
+/**
  * Start the PIXI Ticker used to monitor interactions
  */
 export const startPIXITicker = () => {

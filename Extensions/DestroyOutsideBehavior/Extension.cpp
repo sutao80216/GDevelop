@@ -24,7 +24,7 @@ void DeclareDestroyOutsideBehaviorExtension(gd::PlatformExtension& extension) {
                             _("Destroy when outside of the screen"),
                             _("DestroyOutside"),
                             _("Automatically destroy the object when it goes "
-                              "outside of the screen's borders"),
+                              "outside of the screen's borders."),
                             "",
                             "CppPlatform/Extensions/destroyoutsideicon.png",
                             "DestroyOutsideBehavior",
@@ -39,7 +39,7 @@ void DeclareDestroyOutsideBehaviorExtension(gd::PlatformExtension& extension) {
                    _("Compare the additional border that the object must cross "
                      "before being deleted."),
                    _("The additional border of _PARAM0_ is _PARAM2__PARAM3_"),
-                   _(""),
+                   "",
                    "CppPlatform/Extensions/destroyoutsideicon24.png",
                    "CppPlatform/Extensions/destroyoutsideicon16.png")
       .AddParameter("object", _("Object"))
@@ -56,7 +56,7 @@ void DeclareDestroyOutsideBehaviorExtension(gd::PlatformExtension& extension) {
                 _("Change the additional border that the object must cross "
                   "before being deleted."),
                 _("Do _PARAM2__PARAM3_ to the additional border of _PARAM0_"),
-                _(""),
+                "",
                 "CppPlatform/Extensions/destroyoutsideicon24.png",
                 "CppPlatform/Extensions/destroyoutsideicon16.png")
       .AddParameter("object", _("Object"))

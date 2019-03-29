@@ -1,4 +1,6 @@
 // @flow
+import { Trans } from '@lingui/macro';
+
 import React, { Component } from 'react';
 import Dialog from '../../UI/Dialog';
 import HelpButton from '../../UI/HelpButton';
@@ -13,9 +15,9 @@ type State = {||};
 
 export default class BuildsDialog extends Component<Props, State> {
   _onBuildsUpdated = () => {
-    // Force the Dialog repositioning 
-    this.forceUpdate(); 
-  }
+    // Force the Dialog repositioning
+    this.forceUpdate();
+  };
 
   render() {
     const { open, onClose } = this.props;
@@ -23,11 +25,11 @@ export default class BuildsDialog extends Component<Props, State> {
 
     return (
       <Dialog
-        title="All your builds"
+        title={<Trans>All your builds</Trans>}
         onRequestClose={onClose}
         actions={[
           <FlatButton
-            label="Close"
+            label={<Trans>Close</Trans>}
             key="close"
             primary={false}
             onClick={onClose}
